@@ -17,6 +17,8 @@ concurrency:
 
 jobs:
   deploy:
+    # New repositories can publish code before enabling GitHub Pages.
+    if: github.event_name == 'workflow_dispatch' || vars.BUILDME_PAGES_ENABLED == 'true'
     runs-on: ubuntu-latest
     permissions:
       contents: read

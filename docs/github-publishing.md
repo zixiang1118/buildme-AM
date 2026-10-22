@@ -166,7 +166,9 @@ Website 只有在自己的产品介绍页部署成功后再填写。仓库地址
 4. 等待部署成功，在工作流部署记录或 **Settings → Pages** 中复制实际生成的网站地址。
 5. 把已验证的网站地址填到 About 的 Website，以及需要展示产品页的 README 位置。
 
-本仓库工作流也会在 `main` 上的 `docs/site/**` 或工作流文件发生变化时自动运行。首次推送发生在 Pages 设置完成前时，可以按上面步骤手动重跑。仅修改根 README 不会触发介绍页部署。
+新仓库默认跳过自动部署，代码推送无需先开通 Pages。按上面步骤启用 Pages 后，可以通过 **Run workflow** 手动发布。
+
+如需自动更新，在 **Settings → Secrets and variables → Actions → Variables** 添加仓库变量 `BUILDME_PAGES_ENABLED`，值为 `true`。随后 `main` 上的 `docs/site/**` 或工作流文件发生变化时会自动部署；仅修改根 README 不会触发。这个变量是公开的功能开关，不是 API Key，不要在其中填写密钥。
 
 默认项目站点地址通常形如 `https://zixiang1118.github.io/buildme-AM/`，**以 GitHub 实际给出的地址为准**。不要继续使用其他仓库所有者的 Pages 地址。GitHub Free 可为公开仓库启用 Pages；私有仓库的可用性取决于账户方案，见 [官方 Pages 发布条件](https://docs.github.com/en/pages/getting-started-with-github-pages/configuring-a-publishing-source-for-your-github-pages-site)。
 

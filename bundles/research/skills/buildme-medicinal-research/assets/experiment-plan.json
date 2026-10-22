@@ -1,0 +1,15 @@
+{
+  "projectId": null,
+  "action": "savePlan",
+  "data": {
+    "provenance": "proposed",
+    "title": null,
+    "targetCompoundId": null,
+    "hypothesis": null,
+    "steps": {"reactions": [], "researchQuestion": null, "responseVariables": [], "independentUnit": null, "technicalMeasurementsPerUnit": null, "analysisPlan": null, "criteriaAndRationale": null, "resourceConstraints": []},
+    "factors": [],
+    "controls": [],
+    "replicates": null,
+    "sources": []
+  }
+}

@@ -1,0 +1,18 @@
+{
+  "projectId": null,
+  "action": "recordRun",
+  "data": {
+    "provenance": "proposed",
+    "planId": null,
+    "planVersion": null,
+    "status": "planned",
+    "conditions": {"materials": [], "values": [], "independentPreparationId": null, "technicalMeasurementIds": []},
+    "notes": null,
+    "yieldPercent": null
+  },
+  "batchDraft": {
+    "action": "recordBatch",
+    "data": {"provenance": "proposed", "compoundId": null, "runId": null, "code": null, "purityPercent": null, "notes": null}
+  },
+  "declaration": "This is a draft. Actual conditions, completion or failure, yield, purity and raw files are confirmed by the recorder in the research workbench."
+}

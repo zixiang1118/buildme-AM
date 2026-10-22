@@ -1,0 +1,113 @@
+{
+  "schemaVersion": 1,
+  "name": "BuildMe 药物化学科研技能包",
+  "description": "围绕用户已有课题建立结构、合成、实验批次和论文证据链。",
+  "skills": [
+    {
+      "id": "buildme-medicinal-research",
+      "name": "buildme-medicinal-research",
+      "title": "药物化学科研工作流",
+      "description": "从当前研究对象启动，关联实验计划、反应批次、原始数据与逐节论文写作。",
+      "stage": "writing",
+      "path": "skills/buildme-medicinal-research",
+      "source": "BuildMe local research bundle",
+      "commit": null,
+      "license": "MIT",
+      "runtime": {"kind": "guidance", "notes": "按当前任务调用已封装技能；不自动上传数据。"}
+    },
+    {
+      "id": "hypothesis-generation",
+      "name": "hypothesis-generation",
+      "title": "假设与验证思路",
+      "description": "从已有观察建立候选解释、对照、测量指标和可证伪的实验预测。",
+      "stage": "hypothesis",
+      "path": "skills/hypothesis-generation",
+      "source": "https://github.com/K-Dense-AI/scientific-agent-skills/blob/a1043ef544e3a100c28e70a736b6cf32554d0677/skills/hypothesis-generation/SKILL.md",
+      "commit": "a1043ef544e3a100c28e70a736b6cf32554d0677",
+      "license": "MIT",
+      "version": "2.4",
+      "runtime": {"kind": "python", "python": ">=3.11", "packages": [], "network": "none", "notes": "校验脚本仅检查记录结构，不验证科学真伪。"}
+    },
+    {
+      "id": "rdkit",
+      "name": "rdkit",
+      "title": "分子结构与性质计算",
+      "description": "读取 SMILES，保留原结构和立体化学，计算分子描述符并生成结构图。",
+      "stage": "molecule",
+      "path": "skills/rdkit",
+      "source": "https://github.com/K-Dense-AI/scientific-agent-skills/blob/a1043ef544e3a100c28e70a736b6cf32554d0677/skills/rdkit/SKILL.md",
+      "commit": "a1043ef544e3a100c28e70a736b6cf32554d0677",
+      "license": "BSD-3-Clause",
+      "version": "1.5",
+      "runtime": {"kind": "python", "python": ">=3.11", "packages": ["rdkit==2026.3.6"], "network": "installation only", "notes": "结构计算不代表药效、实测入脑或安全性。"}
+    },
+    {
+      "id": "medchem",
+      "name": "medchem",
+      "title": "药物化学结构检查",
+      "description": "检查 CNS 等性质规则、结构提醒和候选系列差异，保留检查依据。",
+      "stage": "molecule",
+      "path": "skills/medchem",
+      "source": "https://github.com/K-Dense-AI/scientific-agent-skills/blob/a1043ef544e3a100c28e70a736b6cf32554d0677/skills/medchem/SKILL.md",
+      "commit": "a1043ef544e3a100c28e70a736b6cf32554d0677",
+      "license": "Apache-2.0",
+      "version": "1.4",
+      "runtime": {"kind": "python", "python": ">=3.11", "packages": ["medchem==2.1.1", "datamol==0.12.5", "rdkit==2026.3.6"], "network": "installation only", "notes": "本地规则使用符合 medchem 依赖范围的 datamol 0.12.5；上游文档示例为 0.13.0。结构提醒用于研究复核；可选 Lilly 原生工具未安装。"}
+    },
+    {
+      "id": "retrosynthesis",
+      "name": "retrosynthesis",
+      "title": "候选合成路线",
+      "description": "使用本地 AiZynthFinder、策略模型和库存搜索候选逆合成路线。",
+      "stage": "synthesis",
+      "path": "skills/retrosynthesis",
+      "source": "https://github.com/K-Dense-AI/drug-discovery-agent-skills/blob/57dd4a95835f892b1a3ef8f7f429900f82278a7f/skills/retrosynthesis/SKILL.md",
+      "commit": "57dd4a95835f892b1a3ef8f7f429900f82278a7f",
+      "license": "MIT",
+      "version": "1.0",
+      "runtime": {"kind": "python", "python": ">=3.10,<3.13", "packages": ["aizynthfinder==4.4.1", "numpy==1.26.4", "pyarrow==21.0.0"], "network": "installation and separately configured model download", "requires": ["local expansion model", "local reaction templates", "local filter model", "local stock file"], "notes": "独立环境固定 PyArrow 21 兼容 NumPy 1.x；环境和模型未就绪时不生成替代路线，候选路线需文献及实验核验。"}
+    },
+    {
+      "id": "experimental-design",
+      "name": "experimental-design",
+      "title": "实验条件与对照设计",
+      "description": "设计因素筛选、响应面、随机运行顺序、批次与独立实验重复。",
+      "stage": "experiment",
+      "path": "skills/experimental-design",
+      "source": "https://github.com/K-Dense-AI/scientific-agent-skills/blob/a1043ef544e3a100c28e70a736b6cf32554d0677/skills/experimental-design/SKILL.md",
+      "commit": "a1043ef544e3a100c28e70a736b6cf32554d0677",
+      "license": "MIT",
+      "version": "1.5",
+      "runtime": {"kind": "python", "python": ">=3.12", "packages": ["numpy", "pandas", "pydoe==1.5.0"], "network": "installation only", "notes": "DoE 矩阵执行依赖按需配置；建议不能超出用户确认的可行条件范围。"}
+    },
+    {
+      "id": "analytical-method-validation",
+      "name": "analytical-method-validation",
+      "title": "分析方法与质量控制",
+      "description": "检查校准、回收率、精密度、检测／定量限与方法比较的实验依据。",
+      "stage": "quality",
+      "path": "skills/analytical-method-validation",
+      "source": "https://github.com/K-Dense-AI/scientific-agent-skills/blob/a1043ef544e3a100c28e70a736b6cf32554d0677/skills/analytical-method-validation/SKILL.md",
+      "commit": "a1043ef544e3a100c28e70a736b6cf32554d0677",
+      "license": "MIT",
+      "version": "2.0",
+      "runtime": {"kind": "python", "python": ">=3.11", "packages": [], "network": "none", "notes": "需先明确适用框架和事先确定的标准；重复进样不代替独立样品制备。"}
+    },
+    {
+      "id": "statistical-analysis",
+      "name": "statistical-analysis",
+      "title": "实验数据统计分析",
+      "description": "按实验层次比较结果，报告效应量、不确定性、诊断与失败／无效应结果。",
+      "stage": "analysis",
+      "path": "skills/statistical-analysis",
+      "source": "https://github.com/K-Dense-AI/scientific-agent-skills/blob/a1043ef544e3a100c28e70a736b6cf32554d0677/skills/statistical-analysis/SKILL.md",
+      "commit": "a1043ef544e3a100c28e70a736b6cf32554d0677",
+      "license": "MIT",
+      "version": "2.0",
+      "runtime": {"kind": "python", "python": ">=3.12", "packages": ["scipy==1.18.1", "statsmodels==0.15.0", "pingouin==0.7.0", "pandas", "matplotlib", "seaborn"], "optionalPackages": ["pymc==6.3.2", "arviz==1.3.0"], "network": "installation only", "notes": "统计执行依赖按需配置；计划与探索性分析分别记录。"}
+    }
+  ],
+  "sourceLicenses": ["source-licenses/scientific-agent-skills-MIT.txt", "source-licenses/drug-discovery-agent-skills-MIT.txt", "source-licenses/rdkit-BSD-3-Clause.txt", "source-licenses/medchem-Apache-2.0.txt"],
+  "runtimeConfiguration": "%LOCALAPPDATA%/BuildMe/research-runtime/config.json",
+  "modelsBundled": false
+}

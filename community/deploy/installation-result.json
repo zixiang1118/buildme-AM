@@ -1,0 +1,22 @@
+{
+  "test": "D-1 Ubuntu 24.04 install",
+  "node": "v22.23.3",
+  "uid": 998,
+  "admin": "created with hidden random password",
+  "health": "read-write",
+  "caddy": "proxy and hashed CSS served",
+  "database": "integrity ok",
+  "date": "2026-10-05",
+  "os": "Ubuntu 24.04.5 LTS arm64",
+  "cpus": 2,
+  "memoryGiB": 4,
+  "pnpm": "10.32.1",
+  "mode": "non-root foreground server in clean Docker container",
+  "migrationRepeat": "passed",
+  "notExecuted": [
+    "systemd service startup",
+    "real TLS issuance",
+    "GitHub OAuth",
+    "remote deployment"
+  ]
+}

@@ -1,0 +1,776 @@
+<!doctype html>
+<html lang="zh-CN">
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>BuildMe 界面设计稿</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Schibsted+Grotesk:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap">
+<style>
+/* 布局：一页设计稿，四个桌面窗口自上而下排列；每个窗口是一块可横向滚动的画板。
+   识别物：Logo 里的等距积木。能力 = 积木，成就 = 积木，未解锁 = 虚线轮廓。 */
+:root {
+  --bg: #f2f3f5; --panel: #ffffff; --side: #e9ebef; --raise: #f7f8f9; --hover: #eef0f3;
+  --line: #d9dde3; --line-soft: #e6e9ed;
+  --ink: #14171c; --ink2: #4b5260; --ink3: #858c99;
+  --brand: #c4582f; --brand-soft: #fbece5; --on-brand: #ffffff;
+  --xray: #2460d6; --xray-soft: #e7effd;
+  --dsh: #2d3442; --dsh-soft: #e6e8ec;
+  --ok: #1d8556; --warn: #a96c12; --warn-soft: #fbf1dc; --err: #c43a3a;
+  --stone: #b9bcc2;
+  --shadow: 0 1px 2px rgb(20 23 28 / 6%), 0 18px 48px rgb(20 23 28 / 10%);
+  --pop: 0 8px 28px rgb(20 23 28 / 14%);
+  --ui: "Schibsted Grotesk", -apple-system, "PingFang SC", "Microsoft YaHei", "Helvetica Neue", sans-serif;
+  --mono: "JetBrains Mono", ui-monospace, "SF Mono", Menlo, "PingFang SC", monospace;
+}
+@media (prefers-color-scheme: dark) { :root:not([data-theme="light"]) {
+  --bg: #0c0e12; --panel: #14171d; --side: #0f1116; --raise: #1a1e26; --hover: #20252e;
+  --line: #2a303b; --line-soft: #1f242d;
+  --ink: #eceef2; --ink2: #a8afbc; --ink3: #6c7381;
+  --brand: #e27d52; --brand-soft: #2b1b15; --on-brand: #1a0d07;
+  --xray: #74a4ff; --xray-soft: #131e36;
+  --dsh: #c5ccd8; --dsh-soft: #232832;
+  --ok: #4cc38a; --warn: #e2aa4d; --warn-soft: #2b2212; --err: #f17878;
+  --stone: #5a616e;
+  --shadow: 0 1px 2px rgb(0 0 0 / 40%), 0 18px 48px rgb(0 0 0 / 45%);
+  --pop: 0 8px 28px rgb(0 0 0 / 50%);
+  color-scheme: dark;
+} }
+:root[data-theme="dark"] {
+  --bg: #0c0e12; --panel: #14171d; --side: #0f1116; --raise: #1a1e26; --hover: #20252e;
+  --line: #2a303b; --line-soft: #1f242d;
+  --ink: #eceef2; --ink2: #a8afbc; --ink3: #6c7381;
+  --brand: #e27d52; --brand-soft: #2b1b15; --on-brand: #1a0d07;
+  --xray: #74a4ff; --xray-soft: #131e36;
+  --dsh: #c5ccd8; --dsh-soft: #232832;
+  --ok: #4cc38a; --warn: #e2aa4d; --warn-soft: #2b2212; --err: #f17878;
+  --stone: #5a616e;
+  --shadow: 0 1px 2px rgb(0 0 0 / 40%), 0 18px 48px rgb(0 0 0 / 45%);
+  --pop: 0 8px 28px rgb(0 0 0 / 50%);
+  color-scheme: dark;
+}
+* { box-sizing: border-box; }
+body { margin: 0; background: var(--bg); color: var(--ink); font: 15px/1.6 var(--ui); -webkit-font-smoothing: antialiased; }
+button { font: inherit; color: inherit; cursor: pointer; }
+button:focus-visible { outline: 2px solid var(--xray); outline-offset: 2px; }
+svg.i { width: 16px; height: 16px; flex: none; fill: none; stroke: currentColor; stroke-width: 1.5; stroke-linecap: round; stroke-linejoin: round; }
+.num { font-family: var(--mono); font-variant-numeric: tabular-nums; }
+
+/* ---------- 设计稿页面 ---------- */
+.page { max-width: 1320px; margin: 0 auto; padding-inline: 20px; padding-block: 40px 72px; display: flex; flex-direction: column; gap: 56px; }
+.top { display: flex; flex-wrap: wrap; gap: 20px 40px; align-items: flex-end; justify-content: space-between; }
+.top h1 { margin: 0; font-size: 34px; line-height: 1.15; font-weight: 700; letter-spacing: -.02em; text-wrap: balance; }
+.top p { margin: 10px 0 0; max-width: 46em; color: var(--ink2); }
+.themer { display: inline-flex; padding: 3px; border: 1px solid var(--line); border-radius: 9px; background: var(--panel); }
+.themer button { border: 0; background: none; padding: 5px 14px; border-radius: 6px; font-size: 13px; color: var(--ink2); }
+.themer button[aria-pressed="true"] { background: var(--ink); color: var(--panel); }
+.shot { display: flex; flex-direction: column; gap: 16px; }
+.shot-head { display: flex; flex-wrap: wrap; gap: 6px 24px; align-items: baseline; }
+.shot-head h2 { margin: 0; font-size: 21px; font-weight: 650; letter-spacing: -.01em; }
+.shot-head p { margin: 0; color: var(--ink2); max-width: 60em; }
+.stage { overflow-x: auto; padding: 4px 4px 28px; margin: -4px -4px -28px; }
+
+/* ---------- 应用窗口 ---------- */
+.win { width: 1260px; height: 740px; display: grid; grid-template-columns: 224px minmax(0, 1fr); border: 1px solid var(--line); border-radius: 12px; overflow: hidden; background: var(--panel); box-shadow: var(--shadow); font-size: 13px; line-height: 1.5; position: relative; }
+.win.with-drawer { grid-template-columns: 224px minmax(0, 1fr) 412px; }
+.sb { background: var(--side); border-right: 1px solid var(--line-soft); display: flex; flex-direction: column; padding: 12px 10px; gap: 14px; min-height: 0; }
+.lights { display: flex; gap: 7px; padding: 2px 4px 6px; }
+.lights i { width: 11px; height: 11px; border-radius: 50%; background: var(--line); }
+.brandrow { display: flex; align-items: center; gap: 9px; padding: 0 6px; font-weight: 700; font-size: 15px; letter-spacing: -.01em; }
+.brandrow svg { width: 26px; height: 26px; }
+.newchat { display: flex; align-items: center; gap: 8px; height: 34px; padding: 0 10px; border: 1px solid var(--line); border-radius: 8px; background: var(--panel); font-weight: 600; }
+.newchat kbd { margin-left: auto; font: 11px var(--mono); color: var(--ink3); }
+.nav { display: flex; flex-direction: column; gap: 1px; }
+.nav a { display: flex; align-items: center; gap: 9px; height: 32px; padding: 0 10px; border-radius: 7px; color: var(--ink2); text-decoration: none; }
+.nav a[aria-current] { background: var(--panel); color: var(--ink); font-weight: 600; box-shadow: 0 0 0 1px var(--line-soft); }
+.nav a em { margin-left: auto; font: 500 11px var(--mono); font-style: normal; color: var(--ink3); }
+.sb h6 { margin: 0 0 4px; padding: 0 10px; font-size: 11px; font-weight: 600; color: var(--ink3); letter-spacing: .04em; }
+.hist { display: flex; flex-direction: column; min-height: 0; flex: 1; overflow: hidden; }
+.hist span { padding: 6px 10px; border-radius: 7px; color: var(--ink2); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.hist span.on { background: var(--hover); color: var(--ink); }
+.sbfoot { display: flex; align-items: center; gap: 8px; padding: 8px 10px; border-top: 1px solid var(--line-soft); color: var(--ink2); }
+.dot { width: 7px; height: 7px; border-radius: 50%; background: var(--ok); flex: none; }
+
+.main { display: flex; flex-direction: column; min-width: 0; min-height: 0; }
+.bar { height: 48px; flex: none; display: flex; align-items: center; gap: 10px; padding: 0 18px; border-bottom: 1px solid var(--line-soft); }
+.bar strong { font-size: 14px; font-weight: 600; }
+.bar .sp { flex: 1; }
+.pill { display: inline-flex; align-items: center; gap: 6px; height: 26px; padding: 0 10px; border: 1px solid var(--line); border-radius: 999px; background: var(--panel); color: var(--ink2); font-size: 12px; white-space: nowrap; }
+.pill.xr { border-color: var(--xray); background: var(--xray-soft); color: var(--xray); font-weight: 600; }
+.pill.br { border-color: transparent; background: var(--brand-soft); color: var(--brand); font-weight: 600; }
+.pill.dk { border-color: transparent; background: var(--dsh-soft); color: var(--dsh); font-weight: 600; }
+.btn { display: inline-flex; align-items: center; gap: 6px; height: 30px; padding: 0 12px; border: 1px solid var(--line); border-radius: 8px; background: var(--panel); font-size: 12.5px; font-weight: 600; white-space: nowrap; }
+.btn.pri { background: var(--ink); color: var(--panel); border-color: var(--ink); }
+
+/* 对话 */
+.msgs { flex: 1; min-height: 0; overflow: hidden; padding: 22px 0 6px; display: flex; flex-direction: column; gap: 18px; }
+.col { width: min(100% - 48px, 640px); margin: 0 auto; }
+.me { align-self: flex-end; margin-right: max(24px, calc((100% - 640px) / 2)); max-width: 440px; padding: 9px 13px; border-radius: 12px 12px 3px 12px; background: var(--hover); }
+.steps { display: flex; flex-direction: column; border: 1px solid var(--line-soft); border-radius: 9px; overflow: hidden; }
+.step { display: flex; align-items: center; gap: 9px; padding: 7px 11px; color: var(--ink2); }
+.step + .step { border-top: 1px solid var(--line-soft); }
+.step code { font: 12px var(--mono); color: var(--ink); overflow: hidden; text-overflow: ellipsis; white-space: nowrap; min-width: 0; }
+.step .num { margin-left: auto; font-size: 11px; color: var(--ink3); white-space: nowrap; }
+.step .ok { color: var(--ok); }
+.ans p { margin: 0 0 8px; }
+.ans code { font: 12px var(--mono); padding: 1px 5px; border-radius: 4px; background: var(--hover); }
+.stat { display: flex; align-items: center; gap: 14px; padding-top: 10px; border-top: 1px dashed var(--line); color: var(--ink3); font-size: 12px; }
+.stat b { font: 500 12px var(--mono); color: var(--ink2); }
+.stat .go { margin-left: auto; display: inline-flex; align-items: center; gap: 5px; color: var(--xray); font-weight: 600; }
+.dock { flex: none; padding: 8px 0 16px; }
+.chips { display: flex; gap: 6px; margin-bottom: 8px; }
+.composer { display: flex; align-items: flex-end; gap: 8px; padding: 10px 10px 10px 14px; border: 1px solid var(--line); border-radius: 12px; background: var(--panel); box-shadow: 0 1px 2px rgb(20 23 28 / 5%); color: var(--ink3); min-height: 62px; }
+.composer span { flex: 1; }
+.send { width: 30px; height: 30px; border: 0; border-radius: 8px; background: var(--brand); color: var(--on-brand); display: grid; place-items: center; }
+
+/* X 光抽屉 */
+.xr-drawer { border-left: 1px solid var(--line); background: var(--raise); display: flex; flex-direction: column; min-height: 0; }
+.xr-head { padding: 12px 16px 0; display: flex; flex-direction: column; gap: 10px; }
+.xr-title { display: flex; align-items: center; gap: 8px; }
+.xr-title strong { font-size: 14px; color: var(--xray); display: inline-flex; align-items: center; gap: 6px; }
+.seg { margin-left: auto; display: inline-flex; padding: 2px; border-radius: 7px; background: var(--hover); }
+.seg button { border: 0; background: none; height: 22px; padding: 0 9px; border-radius: 5px; font-size: 11.5px; color: var(--ink2); }
+.seg button[aria-pressed="true"] { background: var(--panel); color: var(--ink); font-weight: 600; box-shadow: 0 0 0 1px var(--line-soft); }
+.kpis { display: grid; grid-template-columns: repeat(4, 1fr); border: 1px solid var(--line-soft); border-radius: 9px; background: var(--panel); }
+.kpis div { padding: 8px 10px; }
+.kpis div + div { border-left: 1px solid var(--line-soft); }
+.kpis b { display: block; font: 600 15px var(--mono); }
+.kpis small { font-size: 11px; color: var(--ink3); }
+.tabs { display: flex; gap: 18px; border-bottom: 1px solid var(--line-soft); margin: 0 -16px; padding: 0 16px; }
+.tabs button { border: 0; background: none; padding: 7px 0 9px; color: var(--ink3); font-size: 12.5px; border-bottom: 2px solid transparent; margin-bottom: -1px; }
+.tabs button[aria-selected="true"] { color: var(--ink); font-weight: 600; border-color: var(--xray); }
+.xr-body { flex: 1; min-height: 0; overflow: hidden auto; padding: 14px 16px 18px; }
+.round { font-size: 11px; font-weight: 600; color: var(--ink3); letter-spacing: .04em; margin: 2px 0 8px; display: flex; align-items: center; gap: 8px; }
+.round::after { content: ""; flex: 1; border-top: 1px solid var(--line-soft); }
+.tl { list-style: none; margin: 0 0 14px; padding: 0; position: relative; display: flex; flex-direction: column; gap: 8px; }
+.tl::before { content: ""; position: absolute; left: 11px; top: 12px; bottom: 12px; border-left: 1px solid var(--line); }
+.ev { position: relative; display: grid; grid-template-columns: 23px minmax(0, 1fr); gap: 9px; }
+.ev > i { width: 23px; height: 23px; border-radius: 7px; background: var(--panel); border: 1px solid var(--line); display: grid; place-items: center; color: var(--ink2); position: relative; }
+.ev > i svg { width: 13px; height: 13px; }
+.ev.m > i { color: var(--xray); border-color: var(--xray); background: var(--xray-soft); }
+.ev.t > i { color: var(--brand); }
+.ev.a > i { color: var(--warn); background: var(--warn-soft); border-color: transparent; }
+.ev-main { display: flex; align-items: baseline; gap: 8px; padding-top: 2px; }
+.ev-main span { min-width: 0; }
+.ev-main .num { margin-left: auto; font-size: 11px; color: var(--ink3); white-space: nowrap; }
+.ev small { display: block; color: var(--ink3); font-size: 11.5px; }
+.what { border: 0; background: none; padding: 0; color: var(--xray); font-size: 11.5px; }
+.par { margin-left: 32px; padding: 2px 0 2px 10px; border-left: 2px solid var(--brand); font-size: 11px; color: var(--brand); font-weight: 600; }
+.card { grid-column: 2; margin-top: 6px; padding: 11px 12px; border-radius: 9px; background: var(--panel); border: 1px solid var(--xray); font-size: 12px; color: var(--ink2); }
+.card b { color: var(--ink); }
+.card dl { margin: 8px 0 0; display: grid; grid-template-columns: auto 1fr; gap: 3px 10px; }
+.card dt { color: var(--ink3); white-space: nowrap; }
+.card dd { margin: 0; }
+.card .btn { margin-top: 10px; height: 26px; font-size: 11.5px; color: var(--xray); border-color: var(--xray); }
+.stack { display: flex; height: 12px; border-radius: 4px; overflow: hidden; gap: 2px; margin: 10px 0 14px; }
+.stack i { display: block; background: var(--c); }
+.legend { list-style: none; margin: 0; padding: 0; display: flex; flex-direction: column; }
+.legend li { display: flex; align-items: center; gap: 9px; padding: 7px 0; border-bottom: 1px solid var(--line-soft); }
+.legend li::before { content: ""; width: 9px; height: 9px; border-radius: 2px; background: var(--c); flex: none; }
+.legend .num { margin-left: auto; color: var(--ink2); font-size: 12px; }
+.legend small { color: var(--ink3); }
+.c1 { --c: var(--ink); } .c2 { --c: var(--ink3); } .c3 { --c: var(--stone); } .c4 { --c: var(--brand); }
+.c5 { --c: color-mix(in srgb, var(--brand), var(--panel) 45%); } .c6 { --c: var(--xray); } .c7 { --c: color-mix(in srgb, var(--xray), var(--panel) 50%); }
+.note { color: var(--ink2); font-size: 12px; margin: 0; }
+.big { font: 600 22px var(--mono); }
+.raw { margin: 0; padding: 12px; border-radius: 9px; background: var(--panel); border: 1px solid var(--line-soft); font: 11.5px/1.65 var(--mono); color: var(--ink2); white-space: pre-wrap; word-break: break-all; }
+.raw u { text-decoration: none; color: var(--xray); } .raw s { text-decoration: none; background: var(--warn-soft); color: var(--warn); border-radius: 3px; padding: 0 3px; }
+
+/* 我的 Agent */
+.agent { flex: 1; min-height: 0; display: grid; grid-template-columns: 400px minmax(0, 1fr); }
+.build { border-right: 1px solid var(--line-soft); background: var(--raise); display: flex; flex-direction: column; padding: 22px 24px; gap: 14px; }
+.build h3 { margin: 0; font-size: 20px; font-weight: 700; letter-spacing: -.01em; }
+.build p { margin: 0; color: var(--ink2); }
+.build svg { flex: 1; min-height: 0; width: 100%; }
+.meter { display: grid; grid-template-columns: repeat(3, 1fr); gap: 1px; background: var(--line-soft); border: 1px solid var(--line-soft); border-radius: 10px; overflow: hidden; }
+.meter div { background: var(--panel); padding: 10px 12px; }
+.meter b { display: block; font: 600 18px var(--mono); }
+.meter small { color: var(--ink3); font-size: 11px; }
+.caps { overflow: hidden auto; padding: 16px 24px 20px; }
+.caps h4 { margin: 0 0 6px; font-size: 11px; font-weight: 600; color: var(--ink3); letter-spacing: .04em; display: flex; gap: 8px; align-items: center; }
+.caps h4 span { font-weight: 400; letter-spacing: 0; }
+.cap { display: grid; grid-template-columns: 30px minmax(0, 1fr) auto 38px; align-items: center; gap: 12px; padding: 8px 0; border-bottom: 1px solid var(--line-soft); }
+.cap svg.cb { width: 30px; height: 30px; }
+.cap strong { font-weight: 600; }
+.cap small { display: block; color: var(--ink3); font-size: 12px; }
+.cap .num { font-size: 11px; color: var(--ink3); text-align: right; }
+.sw { width: 36px; height: 21px; border-radius: 999px; border: 0; background: var(--line); position: relative; padding: 0; transition: background .15s; }
+.sw::after { content: ""; position: absolute; top: 2px; left: 2px; width: 17px; height: 17px; border-radius: 50%; background: var(--panel); box-shadow: 0 1px 2px rgb(0 0 0 / 25%); transition: transform .15s; }
+.sw[aria-checked="true"] { background: var(--brand); }
+.sw[aria-checked="true"]::after { transform: translateX(15px); }
+.sw:disabled { opacity: .5; cursor: default; }
+.locked { display: grid; grid-template-columns: repeat(5, 1fr); gap: 8px; margin-top: 4px; }
+.locked div { border: 1px dashed var(--line); border-radius: 9px; padding: 9px 10px; color: var(--ink3); font-size: 12px; display: flex; flex-direction: column; gap: 3px; }
+.locked b { color: var(--ink2); font-weight: 600; display: flex; align-items: center; gap: 5px; }
+.locked svg { width: 12px; height: 12px; }
+.ct { fill: color-mix(in srgb, var(--c), var(--panel) 28%); } .cl { fill: var(--c); } .cr { fill: color-mix(in srgb, var(--c), #000 16%); }
+.cube path { stroke: var(--panel); stroke-width: 1.2; stroke-linejoin: round; }
+.cube.ghost path { fill: none; stroke: var(--stone); stroke-dasharray: 4 4; stroke-width: 1; }
+
+/* 对比 */
+.cmp-q { padding: 12px 18px; border-bottom: 1px solid var(--line-soft); display: flex; gap: 10px; align-items: center; background: var(--raise); }
+.cmp-q span { color: var(--ink3); white-space: nowrap; }
+.cmp { flex: 1; min-height: 0; display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr) 316px; }
+.run { display: flex; flex-direction: column; min-height: 0; border-right: 1px solid var(--line-soft); }
+.run-h { padding: 12px 16px; display: flex; align-items: center; gap: 8px; border-bottom: 1px solid var(--line-soft); }
+.run-h small { color: var(--ink3); }
+.run-h .ok { margin-left: auto; color: var(--ok); font-size: 12px; display: inline-flex; gap: 4px; align-items: center; }
+.run-b { flex: 1; min-height: 0; overflow: hidden; padding: 14px 16px; display: flex; flex-direction: column; gap: 12px; }
+.run.pi { box-shadow: inset 0 2px 0 var(--brand); } .run.dsh { box-shadow: inset 0 2px 0 var(--dsh); }
+.tag { display: inline-block; font-size: 10.5px; font-weight: 600; padding: 0 6px; border-radius: 4px; background: var(--dsh-soft); color: var(--dsh); margin-left: 6px; }
+.sum { background: var(--raise); padding: 14px 16px; display: flex; flex-direction: column; gap: 12px; min-height: 0; }
+.sum h3 { margin: 0; font-size: 13px; font-weight: 600; }
+.row { display: grid; grid-template-columns: 1fr; gap: 4px; padding-bottom: 10px; border-bottom: 1px solid var(--line-soft); }
+.row label { color: var(--ink3); font-size: 11.5px; }
+.bars { display: grid; grid-template-columns: minmax(0, 1fr) 46px; gap: 3px 8px; align-items: center; }
+.bars i { display: block; height: 7px; border-radius: 2px; background: var(--c); width: var(--w); }
+.bars b { font: 500 11.5px/1 var(--mono); text-align: right; }
+.run-f { display: flex; gap: 14px; padding: 10px 16px; border-top: 1px solid var(--line-soft); color: var(--ink3); font-size: 12px; }
+.run-f b { font: 500 12px var(--mono); color: var(--ink2); }
+.only { display: flex; flex-wrap: wrap; gap: 5px; }
+.sum .btn { justify-content: center; }
+.why { font-size: 12px; color: var(--ink2); margin: 0; padding: 10px 11px; border-radius: 8px; background: var(--panel); border: 1px solid var(--line-soft); }
+
+/* 成就 */
+.ach { flex: 1; min-height: 0; overflow: hidden; padding: 20px 28px; display: flex; flex-direction: column; gap: 16px; }
+.ach-top { display: flex; align-items: center; gap: 20px; }
+.ach-top h3 { margin: 0; font-size: 20px; font-weight: 700; }
+.ach-top h3 span { color: var(--ink3); font: 500 15px var(--mono); margin-left: 6px; }
+.prog { flex: 1; height: 6px; border-radius: 3px; background: var(--line-soft); overflow: hidden; }
+.prog i { display: block; height: 100%; width: 37%; background: var(--brand); }
+.grp h4 { margin: 0 0 8px; font-size: 11px; font-weight: 600; color: var(--ink3); letter-spacing: .04em; }
+.badges { display: grid; grid-template-columns: repeat(6, minmax(0, 1fr)); gap: 8px; }
+.badge { display: grid; grid-template-columns: 34px minmax(0, 1fr); gap: 9px; align-items: center; padding: 8px 10px; border: 1px solid var(--line-soft); border-radius: 10px; background: var(--panel); }
+.badge svg { width: 34px; height: 34px; }
+.badge b { display: block; font-weight: 600; font-size: 12.5px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.badge small { display: block; color: var(--ink3); font-size: 11px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.badge.off { background: none; border-style: dashed; border-color: var(--line); }
+.badge.off b { color: var(--ink3); font-weight: 500; }
+.toast { position: absolute; right: 22px; bottom: 22px; display: grid; grid-template-columns: 40px auto; gap: 12px; align-items: center; padding: 12px 18px 12px 12px; border-radius: 12px; background: var(--ink); color: var(--panel); box-shadow: var(--pop); }
+.toast svg { width: 40px; height: 40px; }
+.toast small { display: block; opacity: .65; font-size: 11px; }
+.toast b { font-size: 14px; }
+.toast .cube path { stroke: var(--ink); }
+
+
+/* 运行中状态 */
+[data-s="run"] .s-done, [data-s="done"] .s-run { display: none !important; }
+.live { margin-left: auto; display: inline-flex; align-items: center; gap: 7px; font-size: 12px; color: var(--ink2); }
+.pulse { width: 8px; height: 8px; border-radius: 50%; background: var(--c, var(--brand)); animation: pulse 1.4s ease-in-out infinite; }
+.spin { width: 13px; height: 13px; flex: none; border-radius: 50%; border: 1.5px solid var(--line); border-top-color: var(--c, var(--brand)); animation: spin .8s linear infinite; }
+@keyframes pulse { 50% { opacity: .3; transform: scale(.8); } }
+@keyframes spin { to { transform: rotate(360deg); } }
+.step.now { background: var(--raise); color: var(--ink); }
+.lanes { display: grid; gap: 6px; padding: 9px 11px 10px 36px; border-top: 1px solid var(--line-soft); background: var(--raise); }
+.lane { display: grid; grid-template-columns: 74px minmax(0, 1fr) 92px; gap: 10px; align-items: center; font-size: 12px; color: var(--ink2); }
+.lane u { display: block; height: 5px; border-radius: 3px; background: var(--line-soft); overflow: hidden; text-decoration: none; }
+.lane u i { display: block; height: 100%; background: var(--dsh); border-radius: 3px; }
+.lane span:last-child { color: var(--ink3); font-size: 11px; text-align: right; white-space: nowrap; }
+.caret::after { content: ""; display: inline-block; width: 7px; height: 14px; margin-left: 2px; vertical-align: -2px; background: var(--ink); animation: pulse 1s steps(2) infinite; }
+.wait { color: var(--ink3); display: flex; align-items: center; gap: 8px; }
+.btn:disabled { opacity: .45; cursor: default; }
+
+/* 社区 */
+.cm { flex: 1; min-height: 0; display: grid; grid-template-columns: minmax(0, 1fr) 300px; overflow: hidden; }
+.feed { padding: 16px 28px; display: flex; flex-direction: column; gap: 12px; min-height: 0; overflow: hidden; }
+.bartabs { display: flex; gap: 2px; margin-left: 14px; padding: 2px; border-radius: 8px; background: var(--hover); }
+.bartabs span { padding: 3px 12px; border-radius: 6px; font-size: 12.5px; color: var(--ink2); }
+.bartabs span.on { background: var(--panel); color: var(--ink); font-weight: 600; box-shadow: 0 0 0 1px var(--line-soft); }
+.postbox { display: flex; align-items: center; gap: 10px; padding: 8px 8px 8px 14px; border: 1px solid var(--line); border-radius: 10px; color: var(--ink3); }
+.postbox span { flex: 1; }
+.post { display: grid; grid-template-columns: 44px minmax(0, 1fr); gap: 12px; padding: 14px 14px 12px 8px; border: 1px solid var(--line-soft); border-radius: 12px; background: var(--panel); }
+.vote { display: flex; flex-direction: column; align-items: center; gap: 1px; padding: 6px 0; border-radius: 8px; color: var(--ink2); align-self: start; }
+.vote.on { background: var(--brand-soft); color: var(--brand); }
+.vote b { font: 600 13px var(--mono); }
+.who { display: flex; align-items: center; gap: 8px; color: var(--ink3); font-size: 12px; }
+.who i { width: 20px; height: 20px; border-radius: 50%; background: var(--c); color: var(--panel); display: grid; place-items: center; font: 600 10px var(--ui); font-style: normal; }
+.who b { color: var(--ink); font-weight: 600; font-size: 13px; }
+.post p { margin: 6px 0 9px; font-size: 13.5px; line-height: 1.6; }
+.link { display: grid; grid-template-columns: auto minmax(0, 1fr); gap: 12px; align-items: center; padding: 9px 12px; border: 1px solid var(--line-soft); border-radius: 9px; background: var(--raise); }
+.link strong { display: block; font-weight: 600; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.link small { color: var(--ink3); font-size: 11.5px; }
+.src { height: 22px; padding: 0 8px; border-radius: 5px; background: var(--ink); color: var(--panel); font: 600 11px var(--ui); display: inline-flex; align-items: center; }
+.thumb { width: 104px; height: 58px; border-radius: 6px; background: var(--dsh-soft); display: grid; place-items: center; position: relative; }
+.thumb::before { content: ""; border: 8px solid transparent; border-left: 13px solid var(--ink2); margin-left: 9px; }
+.thumb em { position: absolute; right: 4px; bottom: 4px; font: 500 10px var(--mono); font-style: normal; background: var(--ink); color: var(--panel); padding: 0 4px; border-radius: 3px; }
+.mini-cmp { display: grid; grid-template-columns: 78px minmax(0, 1fr) 50px; gap: 5px 10px; align-items: center; font-size: 12px; color: var(--ink2); }
+.mini-cmp i { display: block; height: 7px; border-radius: 2px; background: var(--c); width: var(--w); }
+.mini-cmp b { font: 500 11.5px var(--mono); text-align: right; }
+.acts { display: flex; gap: 16px; margin-top: 9px; color: var(--ink3); font-size: 12px; }
+.acts span { display: inline-flex; align-items: center; gap: 5px; }
+.aside { border-left: 1px solid var(--line-soft); background: var(--raise); padding: 16px 18px; display: flex; flex-direction: column; gap: 18px; }
+.aside h4 { margin: 0 0 8px; font-size: 11px; font-weight: 600; color: var(--ink3); letter-spacing: .04em; }
+.rank { list-style: none; margin: 0; padding: 0; display: grid; gap: 9px; }
+.rank li { display: grid; grid-template-columns: 16px minmax(0, 1fr); gap: 8px; }
+.rank li > b { font: 600 12px var(--mono); color: var(--ink3); }
+.rank li:first-child > b { color: var(--brand); }
+.rank span { display: block; font-weight: 500; line-height: 1.4; }
+.rank small { color: var(--ink3); font-size: 11px; }
+.tags { display: flex; flex-wrap: wrap; gap: 6px; }
+.share { border: 1px dashed var(--line); border-radius: 10px; padding: 12px; font-size: 12px; color: var(--ink2); display: grid; gap: 8px; }
+.share b { color: var(--ink); }
+
+
+/* 社区 v1.1 */
+.searchbox { display: inline-flex; align-items: center; gap: 7px; height: 30px; width: 230px; padding: 0 9px; border: 1px solid var(--line); border-radius: 8px; color: var(--ink3); font-size: 12.5px; }
+.searchbox kbd { margin-left: auto; font: 11px var(--mono); border: 1px solid var(--line); border-radius: 4px; padding: 0 5px; }
+.bell { position: relative; width: 30px; height: 30px; display: grid; place-items: center; color: var(--ink2); }
+.bell b { position: absolute; top: 1px; right: 0; min-width: 15px; height: 15px; border-radius: 8px; background: var(--brand); color: var(--on-brand); font: 600 10px/15px var(--mono); text-align: center; }
+.cat { display: inline-flex; align-items: center; gap: 5px; margin-left: 4px; color: var(--ink2); }
+.cat::before { content: ""; width: 7px; height: 7px; border-radius: 2px; background: var(--c); }
+.post h5 { margin: 7px 0 0; font-size: 15.5px; font-weight: 650; line-height: 1.4; letter-spacing: -.005em; }
+.post h5 + p { margin: 4px 0 9px; font-size: 13px; color: var(--ink2); display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; }
+.rx { height: 22px; padding: 0 8px; border: 1px solid var(--line-soft); border-radius: 999px; background: var(--raise); color: var(--ink2); }
+.rx b { font: 500 11px var(--mono); }
+.acts { align-items: center; }
+.strip { border: 1px solid var(--line-soft); border-radius: 12px; background: var(--raise); padding: 10px 12px 12px; }
+.strip-h { display: flex; align-items: baseline; gap: 8px; margin-bottom: 9px; font-size: 12px; color: var(--ink3); }
+.strip-h b { font-size: 13px; color: var(--ink); } .strip-h a { margin-left: auto; color: var(--brand); font-weight: 600; }
+.strip-b { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 10px; }
+.strip .cover { height: 62px; } .strip .work small { display: none; } .strip .wb { padding: 7px 9px 8px; }
+.work { border: 1px solid var(--line-soft); border-radius: 10px; background: var(--panel); overflow: hidden; display: flex; flex-direction: column; min-width: 0; }
+.cover { height: 104px; background: var(--k); position: relative; overflow: hidden; }
+.cover i { position: absolute; border-radius: 4px; background: var(--panel); opacity: .78; }
+.cover i:nth-child(1) { left: 12%; top: 22%; width: 34%; height: 56%; }
+.cover i:nth-child(2) { left: 52%; top: 22%; width: 36%; height: 14%; }
+.cover i:nth-child(3) { left: 52%; top: 43%; width: 26%; height: 9%; opacity: .5; }
+.cover i:nth-child(4) { left: 52%; top: 62%; width: 18%; height: 16%; background: var(--ink); opacity: .7; }
+.k1 { --k: color-mix(in srgb, var(--brand), var(--panel) 35%); } .k2 { --k: color-mix(in srgb, var(--xray), var(--panel) 45%); }
+.k3 { --k: color-mix(in srgb, var(--dsh), var(--panel) 40%); } .k4 { --k: color-mix(in srgb, var(--ok), var(--panel) 45%); }
+.k5 { --k: color-mix(in srgb, var(--warn), var(--panel) 40%); } .k6 { --k: var(--stone); }
+.wb { padding: 9px 11px 10px; display: flex; flex-direction: column; gap: 2px; min-width: 0; }
+.wb strong { font-weight: 650; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.wb small { color: var(--ink3); font-size: 12px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.wm { display: flex; align-items: center; gap: 6px; margin-top: 5px; font-size: 11.5px; color: var(--ink3); min-width: 0; }
+.wm span { white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.wm em { font-style: normal; font-size: 10.5px; font-weight: 600; padding: 0 6px; border-radius: 4px; background: var(--hover); color: var(--ink2); white-space: nowrap; }
+.wm b { margin-left: auto; display: inline-flex; align-items: center; gap: 2px; font: 500 11.5px var(--mono); color: var(--ink2); }
+.wm b svg { width: 12px; height: 12px; }
+.wall { flex: 1; min-height: 0; overflow: hidden; padding: 16px 28px; display: flex; flex-direction: column; gap: 10px; }
+.wall-h { display: flex; align-items: center; gap: 10px; margin-bottom: 4px; }
+.wall-h .seg { margin-left: 0; }
+.wall h4 { margin: 4px 0 0; font-size: 11px; font-weight: 600; color: var(--ink3); letter-spacing: .04em; }
+.wgrid { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 12px; }
+.wgrid.feat { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+.work.big { flex-direction: row; } .work.big .cover { width: 46%; height: 132px; flex: none; }
+.work.big .wb { justify-content: center; padding: 14px 16px; gap: 5px; } .work.big strong { font-size: 16px; } .work.big small { white-space: normal; font-size: 13px; }
+
+/* 规范 */
+.spec { display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 16px; }
+.spec section { border: 1px solid var(--line); border-radius: 12px; background: var(--panel); padding: 18px 20px; min-width: 0; }
+.spec h3 { margin: 0 0 10px; font-size: 14px; }
+.spec p, .spec li { color: var(--ink2); font-size: 14px; }
+.spec ul { margin: 0; padding-left: 18px; }
+.sw-row { display: grid; grid-template-columns: repeat(4, 1fr); gap: 6px; }
+.sw-row div { font: 11px var(--mono); color: var(--ink3); }
+.sw-row div::before { content: ""; display: block; height: 34px; border-radius: 7px; background: var(--c); border: 1px solid var(--line-soft); margin-bottom: 4px; }
+.type b { display: block; font-size: 26px; font-weight: 700; letter-spacing: -.02em; line-height: 1.2; }
+.type code { font: 500 15px var(--mono); }
+@media (prefers-reduced-motion: reduce) { .sw, .sw::after { transition: none; } .pulse, .spin, .caret::after { animation: none; } }
+</style>
+
+<svg width="0" height="0" style="position:absolute" aria-hidden="true">
+  <symbol id="i-plus" viewBox="0 0 16 16"><path d="M8 3v10M3 8h10"/></symbol>
+  <symbol id="i-chat" viewBox="0 0 16 16"><path d="M2.5 4A1.5 1.5 0 0 1 4 2.5h8A1.5 1.5 0 0 1 13.5 4v5a1.5 1.5 0 0 1-1.5 1.5H7L4.5 13v-2.5H4A1.5 1.5 0 0 1 2.5 9z"/></symbol>
+  <symbol id="i-cube" viewBox="0 0 16 16"><path d="M8 1.8 13.5 5v6L8 14.2 2.5 11V5zM2.5 5 8 8.2 13.5 5M8 8.2v6"/></symbol>
+  <symbol id="i-cols" viewBox="0 0 16 16"><path d="M2.5 3H7v10H2.5zM9 3h4.5v10H9z"/></symbol>
+  <symbol id="i-hex" viewBox="0 0 16 16"><path d="M8 1.8 13.5 5v6L8 14.2 2.5 11V5zM5.8 8l1.6 1.6 3-3.2"/></symbol>
+  <symbol id="i-globe" viewBox="0 0 16 16"><circle cx="8" cy="8" r="5.5"/><path d="M2.5 8h11M8 2.5c2 2 2 9 0 11M8 2.5c-2 2-2 9 0 11"/></symbol>
+  <symbol id="i-folder" viewBox="0 0 16 16"><path d="M2.5 4.5a1 1 0 0 1 1-1h3L8 5h4.5a1 1 0 0 1 1 1v5.5a1 1 0 0 1-1 1h-9a1 1 0 0 1-1-1z"/></symbol>
+  <symbol id="i-shield" viewBox="0 0 16 16"><path d="M8 2l5 2v4c0 3-2.2 5-5 6-2.8-1-5-3-5-6V4z"/></symbol>
+  <symbol id="i-scan" viewBox="0 0 16 16"><path d="M2.5 5.5v-2a1 1 0 0 1 1-1h2M10.5 2.5h2a1 1 0 0 1 1 1v2M13.5 10.5v2a1 1 0 0 1-1 1h-2M5.5 13.5h-2a1 1 0 0 1-1-1v-2M2 8h12"/></symbol>
+  <symbol id="i-lock" viewBox="0 0 16 16"><path d="M4 7.5h8v6H4zM5.5 7.5v-2a2.5 2.5 0 0 1 5 0v2"/></symbol>
+  <symbol id="i-file" viewBox="0 0 16 16"><path d="M4 2.5h5l3 3v8H4zM9 2.5v3h3"/></symbol>
+  <symbol id="i-term" viewBox="0 0 16 16"><path d="M2.5 3.5h11v9h-11zM5 6.5 7 8l-2 1.5M8.5 10H11"/></symbol>
+  <symbol id="i-search" viewBox="0 0 16 16"><circle cx="7" cy="7" r="4"/><path d="M10 10l3.5 3.5"/></symbol>
+  <symbol id="i-bell" viewBox="0 0 16 16"><path d="M4 11V7.5a4 4 0 0 1 8 0V11l1 1.5H3zM6.5 14h3"/></symbol>
+  <symbol id="i-check" viewBox="0 0 16 16"><path d="M3.5 8.5l3 3 6-7"/></symbol>
+  <symbol id="i-up" viewBox="0 0 16 16"><path d="M8 13V3M4 7l4-4 4 4"/></symbol>
+  <symbol id="i-spark" viewBox="0 0 16 16"><path d="M8 2v3M8 11v3M2 8h3M11 8h3M4 4l2 2M10 10l2 2M12 4l-2 2M6 10l-2 2"/></symbol>
+</svg>
+
+<div class="page">
+  <header class="top">
+    <div>
+      <h1>BuildMe 界面设计稿</h1>
+      <p>六个核心界面：对话与 X 光、我的 Agent、双引擎对比、社区、作品墙、成就。开关和标签页可以点。整套界面只用一种品牌色（Logo 的陶土色）、一种 X 光专用蓝和一组冷灰，积木是贯穿始终的图形。</p>
+    </div>
+    <div class="themer" role="group" aria-label="主题">
+      <button type="button" data-t="light" aria-pressed="false">浅色</button>
+      <button type="button" data-t="dark" aria-pressed="false">深色</button>
+    </div>
+  </header>
+
+  <section class="shot">
+    <div class="shot-head"><h2>对话与 X 光</h2><p>蓝色只出现在 X 光里，看到蓝色就知道自己在看 Agent 的内部。回答下方的统计条是进入 X 光的入口。</p></div>
+    <div class="stage">
+      <div class="win with-drawer">
+        <aside class="sb" data-on="chat"></aside>
+        <div class="main">
+          <div class="bar"><strong>给 README 补上安装步骤</strong><span class="sp"></span><span class="pill br">我的 Agent · 4/9</span><span class="pill xr"><svg class="i"><use href="#i-scan"/></svg>X 光</span></div>
+          <div class="msgs">
+            <div class="me">README 里缺安装步骤，帮我补上，并确认命令能跑通。</div>
+            <div class="col steps">
+              <div class="step"><svg class="i"><use href="#i-file"/></svg><span>读取</span><code>README.md</code><span class="num">0.1s</span><svg class="i ok"><use href="#i-check"/></svg></div>
+              <div class="step"><svg class="i"><use href="#i-file"/></svg><span>读取</span><code>package.json</code><span class="num">0.1s</span><svg class="i ok"><use href="#i-check"/></svg></div>
+              <div class="step"><svg class="i"><use href="#i-term"/></svg><span>运行</span><code>pnpm install &amp;&amp; pnpm test</code><span class="num">9.4s</span><svg class="i ok"><use href="#i-check"/></svg></div>
+              <div class="step"><svg class="i"><use href="#i-file"/></svg><span>修改</span><code>README.md</code><span class="num">+14 −0</span><svg class="i ok"><use href="#i-check"/></svg></div>
+            </div>
+            <div class="col ans">
+              <p>已经在 README 的「快速开始」前加了「安装」一节，共三步：安装 Node 20 以上版本、运行 <code>pnpm install</code>、运行 <code>pnpm dev</code>。</p>
+              <p>我实际跑了一遍 <code>pnpm install</code> 和 <code>pnpm test</code>，95 个测试全部通过。</p>
+              <div class="stat"><span><b>3</b> 次模型调用</span><span><b>4</b> 个工具</span><span><b>12.4k</b> tokens</span><span><b>18.2s</b></span><span class="go"><svg class="i"><use href="#i-scan"/></svg>看这一回合的 X 光</span></div>
+            </div>
+          </div>
+          <div class="dock"><div class="col">
+            <div class="chips"><span class="pill"><svg class="i"><use href="#i-folder"/></svg>buildme-demo</span><span class="pill"><svg class="i"><use href="#i-shield"/></svg>每次询问</span><span class="pill"><span class="dot"></span>deepseek-chat</span></div>
+            <div class="composer"><span>描述任务或提出问题</span><button class="send" type="button" aria-label="发送"><svg class="i"><use href="#i-up"/></svg></button></div>
+          </div></div>
+        </div>
+        <aside class="xr-drawer">
+          <div class="xr-head">
+            <div class="xr-title"><strong><svg class="i"><use href="#i-scan"/></svg>X 光</strong><span class="note">这一回合</span>
+              <div class="seg" id="lvl"><button type="button" aria-pressed="true">新手</button><button type="button" aria-pressed="false">进阶</button></div></div>
+            <div class="kpis"><div><b>3</b><small>模型调用</small></div><div><b>4</b><small>工具</small></div><div><b>12.4k</b><small>tokens</small></div><div><b>18.2s</b><small>用时</small></div></div>
+            <div class="tabs" role="tablist" id="xtabs">
+              <button type="button" role="tab" aria-selected="true" data-p="p-tl">时间线</button>
+              <button type="button" role="tab" aria-selected="false" data-p="p-pr">提示词</button>
+              <button type="button" role="tab" aria-selected="false" data-p="p-cx">上下文</button>
+              <button type="button" role="tab" aria-selected="false" data-p="p-raw">原始请求</button>
+            </div>
+          </div>
+          <div class="xr-body">
+            <div id="p-tl">
+              <div class="round">第 1 轮</div>
+              <ol class="tl">
+                <li class="ev m"><i><svg class="i"><use href="#i-spark"/></svg></i><div><div class="ev-main"><span>把你的问题和全部背景发给模型</span><span class="num">3,912 tok</span></div><small>其中 2,260 是系统提示词 · <button class="what" type="button">这是什么</button></small></div></li>
+                <li class="ev m"><i><svg class="i"><use href="#i-spark"/></svg></i><div><div class="ev-main"><span>模型决定：先读两个文件</span><span class="num">1.8s</span></div></div></li>
+                <li class="par">2 个工具同时执行</li>
+                <li class="ev t"><i><svg class="i"><use href="#i-file"/></svg></i><div><div class="ev-main"><span>读取 README.md</span><span class="num">0.1s</span></div></div></li>
+                <li class="ev t"><i><svg class="i"><use href="#i-file"/></svg></i><div><div class="ev-main"><span>读取 package.json</span><span class="num">0.1s</span></div></div></li>
+              </ol>
+              <div class="round">第 2 轮</div>
+              <ol class="tl">
+                <li class="ev m"><i><svg class="i"><use href="#i-spark"/></svg></i><div><div class="ev-main"><span>带着两份文件内容，再问一次模型</span><span class="num">5,640 tok</span></div></div></li>
+                <li class="ev a"><i><svg class="i"><use href="#i-shield"/></svg></i><div><div class="ev-main"><span>运行命令前先问你，你点了允许</span><span class="num">等了 3.1s</span></div><small><button class="what" type="button">这是什么</button></small></div>
+                  <div class="card"><b>权限审批</b>：模型只能提出想运行什么，真正去执行的是 harness。执行前拦下来问你一句，这一步是 harness 加的，模型自己不知道。
+                    <dl><dt>Claude Code</dt><dd>Permission 提示</dd><dt>Codex</dt><dd>Approval 模式</dd></dl>
+                    <button class="btn" type="button">结合这一步详细讲讲</button></div></li>
+                <li class="ev t"><i><svg class="i"><use href="#i-term"/></svg></i><div><div class="ev-main"><span>运行 pnpm install &amp;&amp; pnpm test</span><span class="num">9.4s</span></div></div></li>
+              </ol>
+              <div class="round">第 3 轮</div>
+              <ol class="tl">
+                <li class="ev t"><i><svg class="i"><use href="#i-file"/></svg></i><div><div class="ev-main"><span>修改 README.md</span><span class="num">+14 行</span></div></div></li>
+                <li class="ev m"><i><svg class="i"><use href="#i-check"/></svg></i><div><div class="ev-main"><span>模型不再要工具，给出最终回答</span><span class="num">2.2s</span></div></div></li>
+              </ol>
+            </div>
+            <div id="p-pr" hidden>
+              <p class="note">每次提问，Agent 都会先把这段话发给模型。你打开的能力越多，它越长。</p>
+              <div class="big">2,260 <span class="note">tokens</span></div>
+              <div class="stack"><i class="c1" style="flex:620"></i><i class="c2" style="flex:310"></i><i class="c3" style="flex:540"></i><i class="c4" style="flex:180"></i><i class="c5" style="flex:160"></i><i class="c6" style="flex:210"></i><i class="c7" style="flex:240"></i></div>
+              <ul class="legend">
+                <li class="c1">核心身份 <small>不可关</small><span class="num">620</span></li>
+                <li class="c2">工作方式 <small>不可关</small><span class="num">310</span></li>
+                <li class="c3">核心工具说明 <small>读、写、改、运行</small><span class="num">540</span></li>
+                <li class="c4">文档阅读<span class="num">180</span></li>
+                <li class="c5">文件搜索<span class="num">160</span></li>
+                <li class="c6">待办清单<span class="num">210</span></li>
+                <li class="c7">Skill 目录 <small>只有名字和一句话</small><span class="num">240</span></li>
+              </ul>
+            </div>
+            <div id="p-cx" hidden>
+              <p class="note">模型一次能看的内容有上限。这一回合结束时用了这么多：</p>
+              <div class="big">12.4k <span class="note">/ 64k tokens · 19%</span></div>
+              <div class="stack"><i class="c1" style="flex:2260"></i><i class="c3" style="flex:1900"></i><i class="c6" style="flex:5100"></i><i class="c4" style="flex:2940"></i><i class="c7" style="flex:200"></i><i style="flex:51600;--c:var(--line-soft)"></i></div>
+              <ul class="legend">
+                <li class="c1">系统提示词<span class="num">2,260</span></li>
+                <li class="c3">工具定义 <small>8 个工具的说明书</small><span class="num">1,900</span></li>
+                <li class="c6">之前的对话<span class="num">5,100</span></li>
+                <li class="c4">工具返回的结果<span class="num">2,940</span></li>
+                <li class="c7">这次的提问<span class="num">200</span></li>
+              </ul>
+            </div>
+            <div id="p-raw" hidden>
+<pre class="raw">POST /chat/completions
+<u>authorization</u>: <s>«已隐藏»</s>
+
+{
+  <u>"model"</u>: "deepseek-chat",
+  <u>"messages"</u>: [
+    { "role": "system", "content": "你是 BuildMe…" <span class="note">2,260 tok</span> },
+    { "role": "user", "content": "README 里缺安装步骤…" }
+  ],
+  <u>"tools"</u>: [ "read", "write", "edit", "bash",
+    "document_read", "files_search",
+    "todo_manage", "skill_load" ],
+  <u>"stream"</u>: true
+}</pre>
+            </div>
+          </div>
+        </aside>
+      </div>
+    </div>
+  </section>
+
+  <section class="shot">
+    <div class="shot-head"><h2>我的 Agent</h2><p>每打开一项能力，左边就多一块积木，系统提示词和工具数量同步变化。虚线轮廓是还没装上的位置。试着点右边的开关。</p></div>
+    <div class="stage">
+      <div class="win">
+        <aside class="sb" data-on="agent"></aside>
+        <div class="main">
+          <div class="bar"><strong>我的 Agent</strong><span class="sp"></span><button class="btn" type="button" id="allon">全部打开</button><button class="btn" type="button" id="alloff">回到最小</button></div>
+          <div class="agent">
+            <div class="build">
+              <h3 id="b-title"></h3>
+              <p id="b-sub"></p>
+              <svg id="b-svg" viewBox="0 0 340 300" role="img" aria-label="已装上的能力积木"></svg>
+              <div class="meter"><div><b id="m-cap"></b><small>已打开能力</small></div><div><b id="m-tok"></b><small>系统提示词 tokens</small></div><div><b id="m-tool"></b><small>可用工具</small></div></div>
+            </div>
+            <div class="caps">
+              <h4>可以打开的能力 <span>改动从下一次提问开始生效</span></h4>
+              <div id="caplist"></div>
+              <h4 style="margin-top:16px">完全体专属 <span>只有 DSH 有，去对比模式里看它们怎么起作用</span></h4>
+              <div class="locked">
+                <div><b><svg class="i"><use href="#i-lock"/></svg>联网搜索</b>自己上网查资料</div>
+                <div><b><svg class="i"><use href="#i-lock"/></svg>定时任务</b>到点自动干活</div>
+                <div><b><svg class="i"><use href="#i-lock"/></svg>长期目标</b>跨多次对话记住目标</div>
+                <div><b><svg class="i"><use href="#i-lock"/></svg>分身</b>带着全部记忆分出去</div>
+                <div><b><svg class="i"><use href="#i-lock"/></svg>沙箱</b>命令在隔离环境里跑</div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="shot">
+    <div class="shot-head"><h2>双引擎对比</h2><p>同一个问题、同一个模型，左边是你搭的 Agent，右边是完全体，两边同时跑。陶土色代表你的，石墨色代表完全体，右栏实时把差别量化出来。</p><div class="themer" id="cmpstate" role="group" aria-label="状态"><button type="button" data-v="run" aria-pressed="true">运行中</button><button type="button" data-v="done" aria-pressed="false">已完成</button></div></div>
+    <div class="stage">
+      <div class="win" id="cmpwin" data-s="run">
+        <aside class="sb" data-on="cmp"></aside>
+        <div class="main">
+          <div class="bar"><strong>对比</strong><span class="pill"><span class="dot"></span>两边都用 deepseek-chat</span><span class="sp"></span><button class="btn" type="button"><svg class="i"><use href="#i-scan"/></svg>并排看 X 光</button></div>
+          <div class="cmp-q"><span>同一个问题</span><strong>调研一下现在主流的三个 Agent 框架，写一份对比放进 docs/frameworks.md</strong></div>
+          <div class="cmp">
+            <div class="run pi">
+              <div class="run-h"><span class="pill br">我的 Agent</span><small>Pi · 4/9 能力</small><span class="ok s-done"><svg class="i"><use href="#i-check"/></svg>完成 48s</span><span class="live s-run"><i class="pulse"></i>第 3 步 · <span class="num">21s</span></span></div>
+              <div class="run-b">
+                <div class="steps">
+                  <div class="step"><svg class="i"><use href="#i-file"/></svg><span>搜索</span><code>docs/ 里的现有文档</code><span class="num">0.2s</span></div>
+                  <div class="step"><svg class="i"><use href="#i-check"/></svg><span>待办</span><code>列出 3 步</code><span class="num">0.1s</span></div>
+                  <div class="step s-done"><svg class="i"><use href="#i-file"/></svg><span>写入</span><code>docs/frameworks.md</code><span class="num">+62</span></div><div class="step now s-run"><i class="spin"></i><span>正在写入</span><code>docs/frameworks.md</code><span class="num">已写 38 行</span></div>
+                </div>
+                <div class="ans s-run"><p class="caret">我没有联网能力，下面的对比来自我训练时学到的知识，版本信息可能已经</p></div><div class="ans s-done"><p>我没有联网能力，下面的对比来自我训练时学到的知识，版本信息可能已经过时，建议你核对后再使用。</p><p>已写入 <code>docs/frameworks.md</code>，包含三个框架的定位、上手难度和适用场景。</p></div>
+              </div>
+              <div class="run-f"><span class="s-run"><b>4</b> 次模型调用 · <b>3</b> 个工具 · <b>18.6k</b> tokens</span><span class="s-done"><b>6</b> 次模型调用 · <b>4</b> 个工具 · <b>31.2k</b> tokens</span></div>
+            </div>
+            <div class="run dsh">
+              <div class="run-h"><span class="pill dk">完全体</span><small>DSH · 全部能力</small><span class="ok s-done"><svg class="i"><use href="#i-check"/></svg>完成 41s</span><span class="live s-run"><i class="pulse" style="--c:var(--dsh)"></i>第 2 步 · <span class="num">21s</span></span></div>
+              <div class="run-b">
+                <div class="steps">
+                  <div class="step"><svg class="i"><use href="#i-check"/></svg><span>待办</span><code>列出 5 步</code><span class="num">0.1s</span></div>
+                  <div class="step now"><i class="spin s-run" style="--c:var(--dsh)"></i><svg class="i s-done"><use href="#i-cube"/></svg><span>子 Agent ×3</span><code>每个框架派一个去查</code><span class="tag">同时进行</span><span class="num s-done">22s</span></div>
+                  <div class="lanes s-run"><div class="lane"><span>框架 A</span><u><i style="width:100%"></i></u><span>已交回结果</span></div><div class="lane"><span>框架 B</span><u><i style="width:64%"></i></u><span>在读第 2 个网页</span></div><div class="lane"><span>框架 C</span><u><i style="width:38%"></i></u><span>联网搜索中</span></div></div>
+                  <div class="lanes s-done"><div class="lane"><span>框架 A</span><u><i style="width:100%"></i></u><span>搜 3 次 · 读 2 页</span></div><div class="lane"><span>框架 B</span><u><i style="width:100%"></i></u><span>搜 4 次 · 读 2 页</span></div><div class="lane"><span>框架 C</span><u><i style="width:100%"></i></u><span>搜 2 次 · 读 2 页</span></div></div>
+                  <div class="step s-done"><svg class="i"><use href="#i-file"/></svg><span>写入</span><code>docs/frameworks.md</code><span class="num">+118</span></div>
+                </div>
+                <div class="wait s-run"><i class="spin" style="--c:var(--dsh)"></i>等另外两个子 Agent 交回结果，然后汇总</div><div class="ans s-done"><p>三个子 Agent 分别查了各自框架的官方文档和最近的发布说明，我汇总成一张对比表，每条结论后面都附了来源链接。</p></div>
+              </div>
+              <div class="run-f"><span class="s-run"><b>9</b> 次模型调用 · <b>11</b> 个工具 · <b>52.1k</b> tokens</span><span class="s-done"><b>17</b> 次模型调用 · <b>19</b> 个工具 · <b>94.6k</b> tokens</span></div>
+            </div>
+            <div class="sum" id="sum"></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="shot">
+    <div class="shot-head"><h2>社区</h2><p>参考 linux.do 的论坛形态：帖子有标题和板块，可以写长文，可以用表情回应。点赞多的排在首页，顶部一条是作品墙的入口。</p></div>
+    <div class="stage">
+      <div class="win">
+        <aside class="sb" data-on="web"></aside>
+        <div class="main">
+          <div class="bar"><strong>社区</strong><div class="bartabs"><span class=on>热门</span><span>最新</span><span>精华</span><span>作品墙</span></div><span class="sp"></span><span class="searchbox"><svg class="i"><use href="#i-search"/></svg>搜索帖子、作品、用户<kbd>/</kbd></span><span class="bell"><svg class="i"><use href="#i-bell"/></svg><b>3</b></span></div>
+          <div class="cm">
+            <div class="feed">
+              <div class="postbox"><svg class="i"><use href="#i-plus"/></svg><span>贴一个链接，再说两句你为什么推荐</span><button class="btn" type="button">写长文</button><button class="btn pri" type="button">发布</button></div>
+              <div class="strip"><div class="strip-h"><b>作品墙</b><span>本周最受欢迎</span><a>看全部</a></div><div class="strip-b">
+                <div class="work"><div class="cover k1"><i></i><i></i><i></i><i></i></div><div class="wb"><strong>单词卡片机</strong><small>拍照就能生成背单词卡片</small><div class="wm"><span>阿哲</span><em>BuildMe</em><b><svg class="i"><use href="#i-up"/></svg>64</b></div></div></div><div class="work"><div class="cover k2"><i></i><i></i><i></i><i></i></div><div class="wb"><strong>课表小助手</strong><small>把教务系统课表变成日历</small><div class="wm"><span>林夏</span><em>Claude Code</em><b><svg class="i"><use href="#i-up"/></svg>51</b></div></div></div><div class="work"><div class="cover k3"><i></i><i></i><i></i><i></i></div><div class="wb"><strong>论坛日报</strong><small>每天汇总关注板块的新帖</small><div class="wm"><span>Momo</span><em>Codex</em><b><svg class="i"><use href="#i-up"/></svg>38</b></div></div></div><div class="work"><div class="cover k4"><i></i><i></i><i></i><i></i></div><div class="wb"><strong>像素贪吃蛇</strong><small>一晚上 vibe coding 出来的小游戏</small><div class="wm"><span>小北</span><em>BuildMe</em><b><svg class="i"><use href="#i-up"/></svg>29</b></div></div></div></div></div>
+              <article class="post"><div class="vote on"><svg class="i"><use href="#i-up"/></svg><b>86</b></div><div>
+                <div class="who"><i style="--c:var(--brand)">夏</i><b>林夏</b>12 分钟前<span class="cat" style="--c:var(--xray)">分享</span></div>
+                <h5>为什么同一个模型，换个 harness 表现差这么多</h5><p>把 harness 和模型的关系讲得最清楚的一条：模型是发动机，harness 是整辆车。看完再打开 X 光，每一步都能对上。</p><div class="link"><span class="src">X</span><div><strong>长推 12 条：harness 才是 Agent 体验的决定因素</strong><small>x.com</small></div></div>
+                <div class="acts"><span class="rx">👍<b>42</b></span><span class="rx">🚀<b>17</b></span><span class="rx">🤔<b>5</b></span><span><svg class="i"><use href="#i-chat"/></svg>14 条回复</span><span>1.2k 次浏览</span><span>#harness</span></div></div></article>
+              <article class="post"><div class="vote"><svg class="i"><use href="#i-up"/></svg><b>73</b></div><div>
+                <div class="who"><i style="--c:var(--xray)">哲</i><b>阿哲</b>1 小时前<span class="cat" style="--c:var(--brand)">文章</span></div>
+                <h5>我把上下文压缩关掉聊了两小时，记录一下撞墙的全过程</h5><p>先说结论：到第 47 轮开始报错。这篇按时间线记录每一轮的上下文占用，附 X 光截图 6 张，最后讲讲压缩到底帮我们做了什么……</p>
+                <div class="acts"><span class="rx">❤️<b>31</b></span><span class="rx">😂<b>12</b></span><span class="rx">👀<b>9</b></span><span><svg class="i"><use href="#i-chat"/></svg>22 条回复</span><span>860 次浏览</span><span>#上下文</span></div></div></article>
+            </div>
+            <aside class="aside">
+              <div><h4>本周大家在看</h4><ol class="rank">
+                <li><b>1</b><div><span>Skill 到底是什么：渐进式披露讲解</span><small>分享 · L 站 · 214 人看过</small></div></li>
+                <li><b>2</b><div><span>上下文工程入门，比提示词工程重要</span><small>文章 · 187 人看过</small></div></li>
+                <li><b>3</b><div><span>求助：子 Agent 一直不返回结果</span><small>问答 · 132 人看过</small></div></li>
+                <li><b>4</b><div><span>MCP 是什么，五分钟看懂</span><small>分享 · YouTube · 98 人看过</small></div></li>
+              </ol></div>
+              <div><h4>标签</h4><div class="tags"><span class="pill">#harness</span><span class="pill">#Skill</span><span class="pill">#vibe coding</span><span class="pill">#上下文</span><span class="pill">#MCP</span><span class="pill">#对比</span></div></div>
+              <div class="share"><b>分享你的发现</b>对比结果和成就都可以一键发到社区，不会带上你的对话内容。</div>
+            </aside>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="shot">
+    <div class="shot-head"><h2>作品墙</h2><p>带封面的卡片网格。每个作品标明是用哪个 harness 做的，可以按 harness 筛选；管理员精选的作品在顶部放大显示。</p></div>
+    <div class="stage">
+      <div class="win">
+        <aside class="sb" data-on="web"></aside>
+        <div class="main">
+          <div class="bar"><strong>社区</strong><div class="bartabs"><span>热门</span><span>最新</span><span>精华</span><span class=on>作品墙</span></div><span class="sp"></span><span class="searchbox"><svg class="i"><use href="#i-search"/></svg>搜索帖子、作品、用户<kbd>/</kbd></span><span class="bell"><svg class="i"><use href="#i-bell"/></svg><b>3</b></span></div>
+          <div class="wall">
+            <div class="wall-h"><div class="tags"><span class="pill dk">全部</span><span class="pill">BuildMe <b class="num">86</b></span><span class="pill">Claude Code <b class="num">54</b></span><span class="pill">Codex <b class="num">41</b></span><span class="pill">Cursor <b class="num">23</b></span><span class="pill">其他</span></div><span class="sp"></span><div class="seg"><button type="button" aria-pressed="true">最受欢迎</button><button type="button" aria-pressed="false">最新</button></div><button class="btn pri" type="button"><svg class="i"><use href="#i-plus"/></svg>发布作品</button></div>
+            <h4>精选</h4>
+            <div class="wgrid feat"><div class="work big"><div class="cover k5"><i></i><i></i><i></i><i></i></div><div class="wb"><strong>记账本</strong><small>说一句话就记一笔账，月底自动出图表</small><div class="wm"><span>周周</span><em>BuildMe</em><em>Skill</em><b><svg class="i"><use href="#i-up"/></svg>212</b></div></div></div><div class="work big"><div class="cover k1"><i></i><i></i><i></i><i></i></div><div class="wb"><strong>单词卡片机</strong><small>拍照就能生成背单词卡片，支持导出到 Anki</small><div class="wm"><span>阿哲</span><em>BuildMe</em><b><svg class="i"><use href="#i-up"/></svg>164</b></div></div></div></div>
+            <h4>全部作品 · 204</h4>
+            <div class="wgrid"><div class="work"><div class="cover k2"><i></i><i></i><i></i><i></i></div><div class="wb"><strong>课表小助手</strong><small>把教务系统课表变成日历</small><div class="wm"><span>林夏</span><em>Claude Code</em><b><svg class="i"><use href="#i-up"/></svg>51</b></div></div></div><div class="work"><div class="cover k3"><i></i><i></i><i></i><i></i></div><div class="wb"><strong>论坛日报</strong><small>每天汇总关注板块的新帖</small><div class="wm"><span>Momo</span><em>Codex</em><b><svg class="i"><use href="#i-up"/></svg>38</b></div></div></div><div class="work"><div class="cover k4"><i></i><i></i><i></i><i></i></div><div class="wb"><strong>像素贪吃蛇</strong><small>一晚上 vibe coding 出来的小游戏</small><div class="wm"><span>小北</span><em>BuildMe</em><b><svg class="i"><use href="#i-up"/></svg>29</b></div></div></div><div class="work"><div class="cover k6"><i></i><i></i><i></i><i></i></div><div class="wb"><strong>简历排版器</strong><small>填表单，自动排成一页 PDF</small><div class="wm"><span>Kai</span><em>Cursor</em><b><svg class="i"><use href="#i-up"/></svg>27</b></div></div></div><div class="work"><div class="cover k5"><i></i><i></i><i></i><i></i></div><div class="wb"><strong>读书笔记库</strong><small>划线自动整理成卡片</small><div class="wm"><span>阿宁</span><em>Claude Code</em><b><svg class="i"><use href="#i-up"/></svg>24</b></div></div></div><div class="work"><div class="cover k2"><i></i><i></i><i></i><i></i></div><div class="wb"><strong>宿舍值日表</strong><small>自动排班并提醒</small><div class="wm"><span>大鹏</span><em>Codex</em><b><svg class="i"><use href="#i-up"/></svg>19</b></div></div></div><div class="work"><div class="cover k1"><i></i><i></i><i></i><i></i></div><div class="wb"><strong>天气穿衣</strong><small>根据天气建议今天穿什么</small><div class="wm"><span>橙子</span><em>BuildMe</em><b><svg class="i"><use href="#i-up"/></svg>17</b></div></div></div><div class="work"><div class="cover k3"><i></i><i></i><i></i><i></i></div><div class="wb"><strong>番茄钟</strong><small>带统计的专注计时器</small><div class="wm"><span>小林</span><em>BuildMe</em><b><svg class="i"><use href="#i-up"/></svg>15</b></div></div></div></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="shot">
+    <div class="shot-head"><h2>成就</h2><p>每个成就是一块积木，没解锁的是虚线轮廓。颜色按类别区分：起步用灰，X 光用蓝，搭建用陶土色，对比用石墨色。</p></div>
+    <div class="stage">
+      <div class="win">
+        <aside class="sb" data-on="ach"></aside>
+        <div class="main">
+          <div class="bar"><strong>成就</strong><span class="sp"></span><button class="btn" type="button">导出学习记录</button></div>
+          <div class="ach">
+            <div class="ach-top"><h3>11<span>/ 30</span></h3><div class="prog"><i></i></div><span class="note">自动记录你做过的事，不检查对错</span></div>
+            <div id="achgroups" style="display:flex;flex-direction:column;gap:14px"></div>
+          </div>
+          <div class="toast"><svg viewBox="0 0 40 40" id="toastcube"></svg><div><small>解锁成就</small><b>左右开弓</b><small>Agent 第一次同时执行了两个工具</small></div></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="shot">
+    <div class="shot-head"><h2>设计规范摘要</h2><p>你确认方向后，我会把这些写成给 Codex 的完整实现文档。</p></div>
+    <div class="spec">
+      <section><h3>颜色</h3>
+        <div class="sw-row"><div style="--c:var(--brand)">品牌<br>我的 Agent</div><div style="--c:var(--xray)">X 光</div><div style="--c:var(--dsh)">完全体</div><div style="--c:var(--ink)">文字</div>
+        <div style="--c:var(--bg)">底</div><div style="--c:var(--side)">侧栏</div><div style="--c:var(--panel)">面板</div><div style="--c:var(--line)">描边</div></div></section>
+      <section class="type"><h3>字体</h3><b>BuildMe 搭出来</b><p>界面用 Schibsted Grotesk 加系统中文字体；所有数字、路径、命令用 <code>JetBrains Mono 12.4k</code>，数字等宽对齐。两套字体都随安装包内置，不联网加载。</p></section>
+      <section><h3>规则</h3><ul><li>颜色有含义：陶土色只给「你的 Agent」和主要操作，蓝色只给 X 光</li><li>不用 emoji 当图标，统一 1.5px 线性图标</li><li>层级靠 1px 描边和底色深浅区分，阴影只给弹出层</li><li>圆角三档：控件 8，卡片 10，窗口 12</li><li>浅色、深色两套主题同等完成度</li></ul></section>
+    </div>
+  </section>
+</div>
+
+<script>
+const $ = (s, r = document) => r.querySelector(s), $$ = (s, r = document) => [...r.querySelectorAll(s)];
+const icon = n => `<svg class="i"><use href="#i-${n}"/></svg>`;
+
+// 等距积木：顶点 (x,y) 为顶面最上角，s 为边长
+function cube(x, y, s, color, ghost) {
+  const w = s * .866, h = s * .5, p = a => a.map(v => v.toFixed(1)).join(" ");
+  const top = `M${p([x, y])}L${p([x + w, y + h])}L${p([x, y + s])}L${p([x - w, y + h])}Z`;
+  const left = `M${p([x - w, y + h])}L${p([x, y + s])}L${p([x, y + 2 * s])}L${p([x - w, y + h + s])}Z`;
+  const right = `M${p([x, y + s])}L${p([x + w, y + h])}L${p([x + w, y + h + s])}L${p([x, y + 2 * s])}Z`;
+  return `<g class="cube${ghost ? " ghost" : ""}" style="--c:${color}"><path class="ct" d="${top}"/><path class="cl" d="${left}"/><path class="cr" d="${right}"/></g>`;
+}
+const mini = (color, ghost, box = 34) => `<svg viewBox="0 0 ${box} ${box}" class="cb">${cube(box / 2, box * .06, box * .44, color, ghost)}</svg>`;
+const logo = () => { const s = 7.2, w = s * .866; return `<svg viewBox="0 0 28 28">${cube(14, 1.5, s, "var(--brand)")}${cube(14 - w, 1.5 + s * 1.5, s, "var(--stone)")}${cube(14 + w, 1.5 + s * 1.5, s, "var(--stone)")}</svg>`; };
+
+// 侧栏
+const NAV = [["chat", "chat", "对话", ""], ["agent", "cube", "我的 Agent", "4/9"], ["cmp", "cols", "对比", ""], ["ach", "hex", "成就", "11/30"], ["web", "globe", "社区", ""]];
+$$(".sb").forEach(el => {
+  el.innerHTML = `<div class="lights"><i></i><i></i><i></i></div><div class="brandrow">${logo()}BuildMe</div>
+  <button class="newchat" type="button">${icon("plus")}新对话<kbd>⌘N</kbd></button>
+  <nav class="nav">${NAV.map(n => `<a href="#"${n[0] === el.dataset.on ? ' aria-current="page"' : ""}>${icon(n[1])}${n[2]}${n[3] ? `<em>${n[3]}</em>` : ""}</a>`).join("")}</nav>
+  <div class="hist"><h6>最近会话</h6><span class="on">给 README 补上安装步骤</span><span>解释一下 agent 循环</span><span>对比：调研三个 Agent 框架</span><span>写一个代码审查 Skill</span><span>为什么会上下文溢出</span></div>
+  <div class="sbfoot"><span class="dot"></span>deepseek-chat<span style="margin-left:auto">设置</span></div>`;
+  $$("a", el).forEach(a => a.addEventListener("click", e => e.preventDefault()));
+});
+
+// 我的 Agent
+const CAPS = [
+  ["documents", "文档阅读", "读 PDF、Word 和网页存档", 180, 1], ["search", "文件搜索", "在工作文件夹里按名字和内容查找", 160, 1],
+  ["web", "网页抓取", "打开一个链接并读取内容", 140, 1], ["todo", "待办清单", "把大任务拆成几步，做完一步勾一步", 210, 1],
+  ["plan", "先计划再动手", "动手前先写方案，等你确认", 230, 1], ["skills", "Skill", "按需加载的说明书，用到时才读全文", 240, 1],
+  ["compaction", "上下文压缩", "对话太长时自动总结旧内容，腾出空间", 0, 0], ["subagents", "子 Agent", "把一块子任务交给另一个 Agent 去做", 320, 1],
+  ["workflow", "工作流", "多个子 Agent 按步骤接力，需要先打开子 Agent", 280, 1]];
+const on = new Set(["documents", "search", "todo", "skills"]);
+const SLOTS = [[0, 0, 0], [1, 0, 0], [0, 1, 0], [1, 1, 0], [2, 0, 0], [0, 2, 0], [0, 0, 1], [1, 0, 1], [0, 1, 1], [0, 0, 2]];
+const TITLES = ["最小的 Agent", "刚开始长大", "刚开始长大", "有模有样了", "有模有样了", "已经过半", "能独立干活了", "能独立干活了", "只差一步", "Pi 上的满配"];
+function renderAgent() {
+  const n = on.size, S = 46, W = S * .866;
+  const order = SLOTS.map((p, i) => ({ p, i })).sort((a, b) => (a.p[0] + a.p[1] + a.p[2]) - (b.p[0] + b.p[1] + b.p[2]) || a.p[2] - b.p[2]);
+  $("#b-svg").innerHTML = order.map(({ p, i }) => {
+    const x = 170 + (p[0] - p[1]) * W, y = 96 + (p[0] + p[1]) * S * .5 - p[2] * S;
+    return i > n ? cube(x, y, S, "var(--stone)", true) : "";
+  }).join("") + order.map(({ p, i }) => {
+    const x = 170 + (p[0] - p[1]) * W, y = 96 + (p[0] + p[1]) * S * .5 - p[2] * S;
+    return i <= n ? cube(x, y, S, i === n ? "var(--brand)" : "var(--stone)") : "";
+  }).join("");
+  const tok = 1470 + CAPS.filter(c => on.has(c[0])).reduce((a, c) => a + c[3], 0);
+  const tools = 4 + CAPS.filter(c => on.has(c[0])).reduce((a, c) => a + c[4], 0);
+  $("#b-title").textContent = TITLES[n];
+  $("#b-sub").textContent = n === 0 ? "只有一个循环和四个基本工具：读、写、改、运行命令。" : n === 9 ? "Pi 上能开的都开了。剩下五项只有完全体有。" : `在最小 Agent 上加了 ${n} 项能力，还有 ${9 - n} 项可以打开。`;
+  $("#m-cap").textContent = `${n}/9`; $("#m-tok").textContent = tok.toLocaleString("en-US"); $("#m-tool").textContent = tools;
+  $("#caplist").innerHTML = CAPS.map(c => `<div class="cap">${mini(on.has(c[0]) ? "var(--brand)" : "var(--stone)", !on.has(c[0]), 30)}
+    <div><strong>${c[1]}</strong><small>${c[2]}</small></div><span class="num">${c[3] ? "+" + c[3] + " tok" : "不占提示词"}</span>
+    <button class="sw" type="button" role="switch" aria-checked="${on.has(c[0])}" aria-label="${c[1]}" data-id="${c[0]}"></button></div>`).join("");
+}
+$("#caplist").addEventListener("click", e => {
+  const b = e.target.closest(".sw"); if (!b) return; const id = b.dataset.id;
+  if (on.has(id)) { on.delete(id); if (id === "subagents") on.delete("workflow"); }
+  else { on.add(id); if (id === "workflow") on.add("subagents"); }
+  renderAgent();
+});
+$("#allon").addEventListener("click", () => { CAPS.forEach(c => on.add(c[0])); renderAgent(); });
+$("#alloff").addEventListener("click", () => { on.clear(); renderAgent(); });
+renderAgent();
+
+// 成就
+const ACH = [
+  ["起步", "var(--stone)", [["第一句话", "完成第一次对话", 1], ["动手了", "Agent 第一次用工具", 1], ["敲命令", "第一次运行命令", 1], ["改文件", "第一次修改文件", 1], ["把关人", "第一次批准操作", 1], ["我说不行", "第一次拒绝操作", 0], ["左右开弓", "同时执行两个工具", 1], ["马拉松", "一回合超过 10 步", 0]]],
+  ["X 光", "var(--xray)", [["看见内部", "第一次打开 X 光", 1], ["读提示词", "看过完整系统提示词", 1], ["看原始请求", "看过发给模型的原文", 0], ["这是什么", "第一次点开讲解", 1], ["刨根问底", "看过 20 条讲解", 0], ["追问到底", "让模型结合现场讲解", 0]]],
+  ["搭建", "var(--brand)", [["第一块积木", "打开第一项能力", 1], ["过半", "打开 5 项能力", 0], ["满配", "9 项全部打开", 0], ["按需加载", "Agent 加载了一个 Skill", 1], ["自己写 Skill", "加载了你写的 Skill", 0], ["腾出空间", "触发一次上下文压缩", 0], ["撞墙", "关掉压缩后上下文溢出", 0], ["分工", "用了一次子 Agent", 0], ["流水线", "跑完一个工作流", 0], ["有条理", "Agent 用了待办清单", 0]]],
+  ["对比", "var(--dsh)", [["同台竞技", "完成第一次对比", 0], ["并排透视", "并排看两边的 X 光", 0], ["十番战", "完成 10 次对比", 0], ["看懂差别", "让模型总结差别", 0], ["换个大脑", "换一个模型再试", 0], ["读网页", "Agent 抓取了一个网页", 0]]]];
+$("#achgroups").innerHTML = ACH.map(g => `<div class="grp"><h4>${g[0]} · ${g[2].filter(a => a[2]).length}/${g[2].length}</h4><div class="badges">${g[2].map(a =>
+  `<div class="badge${a[2] ? "" : " off"}">${mini(g[1], !a[2])}<div><b>${a[0]}</b><small>${a[1]}</small></div></div>`).join("")}</div></div>`).join("");
+$("#toastcube").innerHTML = cube(20, 2.5, 17.5, "var(--stone)");
+
+
+// 对比：运行中 / 已完成
+const SUM = { run: [["模型调用次数", 4, 9], ["消耗 tokens", 18.6, 52.1, "k"], ["已用时间", 21, 21, "s"]], done: [["模型调用次数", 6, 17], ["消耗 tokens", 31.2, 94.6, "k"], ["用时", 48, 41, "s"]] };
+function renderSum(v) {
+  $("#cmpwin").dataset.s = v;
+  $$("#cmpstate button").forEach(b => b.setAttribute("aria-pressed", b.dataset.v === v));
+  const rows = SUM[v].map(r => { const m = Math.max(r[1], r[2]), u = r[3] || "";
+    return `<div class="row"><label>${r[0]}</label><div class="bars"><i class="c4" style="--w:${r[1] / m * 100}%"></i><b>${r[1]}${u}</b><i style="--c:var(--dsh);--w:${r[2] / m * 100}%"></i><b>${r[2]}${u}</b></div></div>`; }).join("");
+  $("#sum").innerHTML = `<h3>${v === "run" ? "实时差别" : "差别在哪"}</h3>${rows}
+    <div class="row"><label>只有完全体用到的能力</label><div class="only"><span class="pill dk">子 Agent</span><span class="pill dk">联网搜索</span></div></div>
+    <p class="why">${v === "run" ? "完全体派出了 3 个子 Agent 同时上网查资料。你的 Agent 没开这两项能力，只能凭记忆写。" : "完全体多花了 3 倍 tokens，换来的是带来源的最新信息，而且因为三个子 Agent 同时工作，反而更快。"}</p>
+    <button class="btn pri" type="button"${v === "run" ? " disabled" : ""}>让模型总结两边的差别</button>
+    <button class="btn" type="button"${v === "run" ? " disabled" : ""}>查看两边改动的文件</button>`;
+}
+$("#cmpstate").addEventListener("click", e => { const b = e.target.closest("button"); if (b) renderSum(b.dataset.v); });
+renderSum("run");
+
+// 标签页与分段控件
+$("#xtabs").addEventListener("click", e => {
+  const b = e.target.closest("button"); if (!b) return;
+  $$("#xtabs button").forEach(x => { x.setAttribute("aria-selected", x === b); $("#" + x.dataset.p).hidden = x !== b; });
+});
+$("#lvl").addEventListener("click", e => { const b = e.target.closest("button"); if (b) $$("#lvl button").forEach(x => x.setAttribute("aria-pressed", x === b)); });
+
+// 主题切换
+const root = document.documentElement, tb = $$(".top .themer button");
+const sync = () => { const cur = root.dataset.theme || (matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "light"); tb.forEach(b => b.setAttribute("aria-pressed", b.dataset.t === cur)); };
+tb.forEach(b => b.addEventListener("click", () => { root.dataset.theme = b.dataset.t; sync(); }));
+sync();
+</script>

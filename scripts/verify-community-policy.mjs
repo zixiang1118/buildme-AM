@@ -1,0 +1,10 @@
+import assert from 'node:assert/strict';
+import {communityOrigin,navigationPolicy,unreadFromTitle,compareShare,achievementShare,shareUrl} from '../desktop/community-policy.mjs';
+assert.equal(communityOrigin(''),'');assert.throws(()=>communityOrigin('https://example.com/path'));assert.throws(()=>communityOrigin('javascript:alert(1)'));
+const origin='http://localhost:3198',policy=navigationPolicy(origin);
+assert.equal(policy.allowed('https://github.com/login'),false);assert.equal(policy.allowed(origin+'/auth/github'),true);assert.equal(policy.allowed('https://github.com/login/oauth/authorize'),true);assert.equal(policy.allowed('https://evil.example'),false);assert.equal(policy.allowed(origin+'/auth/github/callback'),true);assert.equal(policy.allowed('https://github.com/login'),false);
+assert.equal(unreadFromTitle('(12) 社区'),12);assert.equal(unreadFromTitle('社区'),0);
+const details={group:{kind:'harness',rounds:[{prompt:'private question',runs:{left:{status:'done'},right:{status:'done'}}}],workspace:{path:'/secret/file'},sides:{left:{capabilities:['core'],connection:{model:'deepseek-chat',apiKey:'secret'}}}},metrics:{left:{modelCalls:6,toolCalls:4,tokens:31200,durationMs:48000,tools:['read_file']},right:{modelCalls:17,toolCalls:19,tokens:94600,durationMs:41000,tools:['read_file','spawn_agent','/private/path']}}};
+const data=compareShare(details),url=shareUrl(origin,'compare',data,'dark');assert.equal(data.dsh.tokens,94600);assert.equal(data.pi.seconds,48);assert.equal(new URL(url).searchParams.get('embed'),'1');const payload=Buffer.from(new URL(url).hash.slice(1),'base64url').toString();for(const value of ['secret','question','private','apiKey','workspace'])assert.ok(!payload.includes(value));assert.equal(new URL(url).searchParams.get('type'),'compare');
+assert.deepEqual(achievementShare({achievements:[{id:'parallel-tools'}]},[{id:'parallel-tools',name:'左右开弓'}],'parallel-tools'),{v:1,id:'parallel-tools',name:'左右开弓',unlocked:1,total:1});
+console.log('I-4 I-7 I-9 I-10 community policy and private field whitelist passed');

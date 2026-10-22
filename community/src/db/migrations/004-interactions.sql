@@ -1,0 +1,11 @@
+ALTER TABLE replies ADD COLUMN parent_floor INTEGER;
+ALTER TABLE replies ADD COLUMN updated_at INTEGER;
+ALTER TABLE replies ADD COLUMN status TEXT NOT NULL DEFAULT 'public';
+CREATE INDEX replies_parent ON replies(post_id,parent_floor,floor);
+CREATE INDEX replies_author ON replies(author_id,created_at DESC);
+CREATE TABLE reactions(kind TEXT NOT NULL CHECK(kind IN ('post','reply')),target_id INTEGER NOT NULL,user_id INTEGER NOT NULL REFERENCES users(id),emoji TEXT NOT NULL,created_at INTEGER NOT NULL,PRIMARY KEY(kind,target_id,user_id,emoji));
+CREATE TABLE bookmarks(user_id INTEGER NOT NULL REFERENCES users(id),post_id INTEGER NOT NULL REFERENCES posts(id),created_at INTEGER NOT NULL,PRIMARY KEY(user_id,post_id));
+CREATE TABLE notifications(id INTEGER PRIMARY KEY,user_id INTEGER NOT NULL REFERENCES users(id),actor_id INTEGER NOT NULL REFERENCES users(id),kind TEXT NOT NULL,post_id INTEGER NOT NULL REFERENCES posts(id),floor INTEGER NOT NULL DEFAULT 0,created_at INTEGER NOT NULL,updated_at INTEGER NOT NULL,read_at INTEGER);
+CREATE INDEX notifications_inbox ON notifications(user_id,updated_at DESC,id DESC);
+CREATE INDEX notifications_group ON notifications(user_id,post_id,kind,created_at);
+CREATE TABLE notification_actors(notification_id INTEGER NOT NULL REFERENCES notifications(id) ON DELETE CASCADE,user_id INTEGER NOT NULL REFERENCES users(id),PRIMARY KEY(notification_id,user_id));

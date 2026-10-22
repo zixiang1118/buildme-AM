@@ -1,0 +1,14 @@
+title = "BuildMe source publication secret checks"
+
+[extend]
+useDefault = true
+
+# These entries are SHA-256 file digests, verified against the referenced files.
+# Restrict the exception to these checksum-map lines and the generic rule.
+[[allowlists]]
+description = "Research reference file checksums are not API keys"
+targetRules = ["generic-api-key"]
+condition = "AND"
+paths = ['''(^|[\\/])bundles[\\/]research[\\/]verification\.json$''']
+regexTarget = "line"
+regexes = ['''^\s*"skills/(rdkit/references/api_reference|medchem/references/api_guide)\.md": "[a-f0-9]{64}",?\s*$''']

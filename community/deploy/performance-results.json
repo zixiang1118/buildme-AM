@@ -1,0 +1,125 @@
+{
+  "fullRun": {
+    "at": "2026-10-05T12:27:34.778Z",
+    "hardware": {
+      "platform": "darwin",
+      "arch": "arm64",
+      "cpu": "Apple M1",
+      "cores": 8,
+      "memoryGiB": 8
+    },
+    "dataset": {
+      "users": 1000,
+      "posts": 50000,
+      "longArticles": 500,
+      "works": 2000,
+      "replies": 200000
+    },
+    "results": [
+      {
+        "path": "/",
+        "seconds": 30,
+        "concurrency": 50,
+        "requests": 65909,
+        "p95Ms": 34.93,
+        "p99Ms": 77.53,
+        "maxMs": 1995.19,
+        "firstRequestMs": 692.28,
+        "statuses": {
+          "200": 65909
+        },
+        "pass": true
+      },
+      {
+        "path": "/latest",
+        "seconds": 30,
+        "concurrency": 50,
+        "requests": 57537,
+        "p95Ms": 47.55,
+        "p99Ms": 131.65,
+        "maxMs": 3755.98,
+        "firstRequestMs": 98.08,
+        "statuses": {
+          "200": 57537
+        },
+        "pass": true
+      },
+      {
+        "path": "/works",
+        "seconds": 30,
+        "concurrency": 50,
+        "requests": 21144,
+        "p95Ms": 221.6,
+        "p99Ms": 428.98,
+        "maxMs": 1103.48,
+        "firstRequestMs": 88.78,
+        "statuses": {
+          "200": 21144
+        },
+        "pass": false
+      },
+      {
+        "path": "/p/1",
+        "seconds": 30,
+        "concurrency": 50,
+        "requests": 50786,
+        "p95Ms": 53.95,
+        "p99Ms": 153.23,
+        "maxMs": 1107.32,
+        "firstRequestMs": 89.4,
+        "statuses": {
+          "200": 50786
+        },
+        "pass": true
+      },
+      {
+        "path": "/search?q=harness",
+        "seconds": 30,
+        "concurrency": 50,
+        "requests": 34545,
+        "p95Ms": 114.02,
+        "p99Ms": 252.61,
+        "maxMs": 1814.58,
+        "firstRequestMs": 697.65,
+        "statuses": {
+          "200": 34545
+        },
+        "pass": true
+      }
+    ]
+  },
+  "worksRetest": {
+    "at": "2026-10-05T12:31:23.025Z",
+    "hardware": {
+      "platform": "darwin",
+      "arch": "arm64",
+      "cpu": "Apple M1",
+      "cores": 8,
+      "memoryGiB": 8
+    },
+    "dataset": {
+      "users": 1000,
+      "posts": 50000,
+      "longArticles": 500,
+      "works": 2000,
+      "replies": 200000
+    },
+    "results": [
+      {
+        "path": "/works",
+        "seconds": 30,
+        "concurrency": 50,
+        "requests": 35473,
+        "p95Ms": 106.63,
+        "p99Ms": 332.77,
+        "maxMs": 3055.13,
+        "firstRequestMs": 78.24,
+        "statuses": {
+          "200": 35473
+        },
+        "pass": true
+      }
+    ]
+  },
+  "note": "作品墙首轮P95超标，单独复测通过；所有入口各30秒、并发50。每页先发1次请求；报告保留firstRequestMs与P99/最大值。匿名读取；搜索模拟不同IP以保留真实限流。localhost Node22，非部署主机容量保证。"
+}

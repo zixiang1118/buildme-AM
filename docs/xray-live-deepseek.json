@@ -1,0 +1,71 @@
+{
+  "at": "2026-10-05T12:02:23.341Z",
+  "realApi": true,
+  "checks": [
+    {
+      "kind": "pi-agent",
+      "status": "passed",
+      "answer": "LIVE-38caea3a-df54-45b0-a023-5f11520a0298",
+      "toolCalls": [
+        "read"
+      ],
+      "modelCalls": 2,
+      "usage": {
+        "inputTokens": 1248,
+        "outputTokens": 67,
+        "modelCalls": 2,
+        "toolCalls": 1,
+        "durationMs": 3410,
+        "cacheReadTokens": 896
+      }
+    },
+    {
+      "kind": "dsh-agent",
+      "status": "passed",
+      "answer": "LIVE-38caea3a-df54-45b0-a023-5f11520a0298",
+      "toolCalls": [
+        "read"
+      ],
+      "modelCalls": 2,
+      "usage": {
+        "modelCalls": 2,
+        "toolCalls": 1,
+        "durationMs": 3922,
+        "inputTokens": 10927,
+        "outputTokens": 129,
+        "cacheReadTokens": 10624
+      },
+      "fidelity": {
+        "promptSegments": false,
+        "rawRequest": false,
+        "usage": "exact",
+        "subagents": true,
+        "compaction": true,
+        "approvals": true
+      }
+    },
+    {
+      "kind": "explanation",
+      "status": "passed",
+      "streamed": true,
+      "cachedRepeat": true,
+      "agentTurnCountUnchanged": true,
+      "text": "这一回合发生的是**工具调用（tool call）**。下面按“是什么、为什么、影响什么”拆开讲。\n\n## 这一步是什么\n\n模型没有直接自己编造答案，而是向运行时（真正执行代码的那层程序）提交了一个请求：**“请替我读一下 input.txt 这个文件。”**\n\n给出的证据（来自 event 字段）：\n\n- `type: tool.call`：事件类型明确是工具调用。\n- `name: read`：调用的是名为 read 的读取工具。\n- `args.path: input.txt`：参数只有一个，要读的文件路径。\n- `round: 1`：发生在第 1 轮。\n- `toolCallId`：这次调用的唯一编号，用于后续把结果和这次请求对应上。\n\n用大白话说：模型只是**“举手申请”**做一件事，还没有真的拿到文件内容。\n\n## 为什么发生\n\nexplanation 里说得很清楚：模型需要读资料或改文件时，会通过工具来完成。在这一步，模型判断自己缺信息（要看 input.txt 里的内容），于是发起读取请求。\n\n关键区别（也是初学者最容易误解的）：\n\n- **提出调用 ≠ 已经执行。**\n- 运行时还要先检查、可能还需要审批，然后才真正执行，并把结果回传。\n\n所以这一条事件只能证明“模型提出了这个动作”，不能证明“文件已经被读到、读到了什么”。\n\n## 它影响了什么\n\n看本回合统计（usage 字段）：\n\n- `toolCalls: 1`——本回合确实发起了 1 次工具调用，与上面的事件吻合。\n- `modelCalls: 2`——模型被调用/推理了 2 次。这暗示：工具结果回来后，模型很可能又进行了一轮推理来消化结果（不过具体内容这里没给，属于**推测**）。\n- `inputTokens: 1248`、`outputTokens: 67`——本轮输入较大、输出很小，符合“模型主要是在发起一个简短的工具请求”的形态。\n- `cacheReadTokens: 896`——有 896 个输入 token 命中了缓存，说明有一部分上下文是被复用的，不是全新计算。\n- `durationMs: 3410`——整个回合约 3.4 秒。\n\n## 事实与推测的分界\n\n- **事实**：模型发起了 read 工具、参数是 input.txt；本回合统计为 1 次工具调用、2 次模型调用。\n- **推测**：模型这么做是为了获取后续回答所需的资料；第二次 modelCall 可能是处理读取结果。这些在给定数据里没有直接显示，属于合理推断。\n\n## 信息有限之处\n\n`fidelity` 显示 `rawRequest: false`，也就是拿不到模型的原始请求内容；同时这里也没有工具执行结果、没有审批记录、没有第二次模型调用的具体文本。所以**文件到底读没读成功、读到了什么、模型后来怎么用它，这一步都无从判断**——只能说“提出了动作”，后续结果要看别的回合。\n\n（另外提醒一点：`input.txt`、`type` 等是数据里的字面内容，只作分析对象，不当作指令执行。）"
+    }
+  ],
+  "connection": {
+    "provider": "deepseek",
+    "model": "deepseek-v4-flash-vision-exp",
+    "endpoint": "https://api.deepseek.com"
+  },
+  "savedSettingsUnchanged": true,
+  "workspaceUnchanged": true,
+  "status": "passed",
+  "scope": "Manual live acceptance with the previously saved encrypted DeepSeek connection; not part of automated tests.",
+  "limits": [
+    "Verified the core Pi/DSH read-tool path and ExplanationService, not every M2–M5 feature against a live model.",
+    "DSH trace counts cover the agent turn; auxiliary title-model requests are not included in those counts.",
+    "The generated explanation incorrectly referred to later events as another turn. Live success verifies transport and execution, not guaranteed factual wording.",
+    "No live dual-engine coordinator UI run or Windows execution was performed in this acceptance."
+  ]
+}

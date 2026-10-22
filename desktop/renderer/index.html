@@ -1,0 +1,342 @@
+<!doctype html>
+<html lang="zh-CN" data-theme="dark" data-theme-mode="system">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta http-equiv="Content-Security-Policy" content="default-src 'self'; style-src 'self'; script-src 'self'; connect-src 'none'; img-src 'self' data:; base-uri 'none'; form-action 'none'" />
+    <title>BuildMe</title>
+    <link rel="stylesheet" href="./style.css" />
+    <link rel="stylesheet" href="./experiences.css" />
+    <link rel="stylesheet" href="./platforms.css" />
+    <link rel="stylesheet" href="./platform-modules.css" />
+    <link rel="stylesheet" href="./platform-help.css" />
+  </head>
+  <body>
+    <a class="skip-link" href="#prompt">跳到输入框</a>
+    <main class="app-shell">
+      <aside id="sidebar" class="sidebar" aria-label="主导航">
+        <div class="window-drag-region" aria-hidden="true"></div>
+        <header class="identity">
+          <button id="experience-trigger" class="experience-trigger" type="button" aria-haspopup="menu" aria-expanded="false" aria-controls="experience-menu" aria-label="BuildMe · 切换版本">
+            <img class="identity-mark" src="../assets/buildme-mark.png" alt="" aria-hidden="true" />
+            <span class="identity-copy"><strong id="agent-name">BuildMe</strong><span id="experience-current" class="experience-current">原版工作台</span></span>
+            <svg class="experience-chevron" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true"><path d="m8 9 4-4 4 4m-8 6 4 4 4-4"/></svg>
+          </button>
+          <button id="close-sidebar" class="icon-button close-sidebar" type="button" aria-label="关闭侧边栏">×</button>
+        </header>
+        <p id="experience-tagline" class="experience-tagline">从一个想法，开始创造。</p>
+        <div id="experience-menu" class="experience-menu" role="menu" aria-label="选择 BuildMe 版本" hidden>
+          <div class="experience-menu-heading"><small>YOUR BUILDME</small><strong>选择适合此刻的工作台</strong></div>
+          <button class="experience-option" type="button" role="menuitemradio" data-mode="original" aria-checked="true"><span class="experience-option-icon" aria-hidden="true"></span><span class="experience-option-copy"><strong>原版工作台</strong><small>创造、执行与自由探索</small></span><span class="experience-check" aria-hidden="true">✓</span></button>
+          <button class="experience-option" type="button" role="menuitemradio" data-mode="learning" aria-checked="false"><span class="experience-option-icon" aria-hidden="true"></span><span class="experience-option-copy"><strong>学习版</strong><small>从零看懂 Agent 如何工作</small></span><span class="experience-check" aria-hidden="true">✓</span></button>
+          <button class="experience-option" type="button" role="menuitemradio" data-mode="research" aria-checked="false"><span class="experience-option-icon" aria-hidden="true"></span><span class="experience-option-copy"><strong>科研版</strong><small>搭建属于自己的科研平台</small></span><span class="experience-check" aria-hidden="true">✓</span></button>
+          <p id="experience-menu-note" class="experience-menu-note">切换后开启新对话，历史会话仍保留。</p>
+        </div>
+
+        <button id="new-chat" class="new-chat" type="button">
+          <span aria-hidden="true">＋</span><span>新对话</span><kbd>⌘N</kbd>
+        </button>
+
+        <section class="history" aria-labelledby="history-title">
+          <div class="section-heading">
+            <h2 id="history-title">最近会话</h2>
+            <button id="refresh-sessions" class="icon-button" type="button" aria-label="刷新会话">↻</button>
+          </div>
+          <div id="session-list" class="session-list" aria-live="polite"></div>
+        </section>
+
+        <footer class="sidebar-footer">
+          <button id="community-entry" class="sidebar-action" type="button" disabled><span aria-hidden="true">◇</span><span>社区</span><small>即将开放</small><b id="community-unread" hidden></b></button>
+          <button id="comparisons" class="sidebar-action" type="button"><span aria-hidden="true">⇄</span><span>双路聊天</span></button>
+          <button id="achievements" class="sidebar-action" type="button"><span aria-hidden="true">🏅</span><span>成就</span></button>
+          <button id="my-agent" class="sidebar-action" type="button"><span aria-hidden="true">🧩</span><span>我的 Agent</span></button>
+          <button id="settings" class="sidebar-action" type="button">
+            <span class="sidebar-action-icon" aria-hidden="true">⌘</span><span>模型与偏好</span><kbd>⌘,</kbd>
+          </button>
+          <button id="plugin-market" class="plugin-market-entry" type="button">
+            <span class="plugin-market-icon" aria-hidden="true">✦</span><span><strong>插件市场</strong><small>Pi 社区热门扩展</small></span><span aria-hidden="true">›</span>
+          </button>
+          <div class="local-badge"><span aria-hidden="true"></span>BuildMe · 本地 Agent</div>
+        </footer>
+      </aside>
+
+      <button id="sidebar-backdrop" class="sidebar-backdrop" type="button" aria-label="关闭侧边栏" tabindex="-1"></button>
+
+      <section class="workspace" aria-label="对话工作区">
+        <header class="workspace-header">
+          <button id="open-sidebar" class="icon-button open-sidebar" type="button" aria-label="打开侧边栏" aria-expanded="false">☰</button>
+          <div class="conversation-title">
+            <strong id="chat-title">新对话</strong>
+            <span id="experience-header-badge" class="experience-header-badge">原版</span>
+            <span id="status" class="status" role="status" aria-live="polite"></span>
+          </div>
+          <div class="header-actions">
+            <button id="xray-toggle" class="xray-toggle" type="button" aria-controls="xray-panel" aria-expanded="false" title="X 光（⌘/Ctrl + Shift + X）">◎ X 光</button>
+            <button id="full-edition" class="edition-switch" type="button" title="切换执行引擎（Pi / DSH）">Pi 引擎</button>
+            <button id="platform-entry" class="header-platform-entry" type="button" aria-label="我的科研平台，未启用平台，点击选择平台或搭建" aria-haspopup="menu" aria-expanded="false" aria-controls="platform-menu" title="搭建、使用和改造自己的科研平台" hidden><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m12 3 9 5-9 5-9-5 9-5ZM3 12l9 5 9-5M3 16l9 5 9-5"/></svg><span class="header-platform-copy"><strong>我的科研平台</strong><small id="platform-current-name" aria-live="polite">未启用平台</small></span><svg class="header-platform-chevron" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m6 9 6 6 6-6"/></svg></button>
+            <button id="header-settings" class="header-action" type="button">设置</button>
+            <div id="platform-menu" class="floating-menu header-platform-menu" role="menu" aria-label="选择科研平台" hidden>
+              <div id="platform-menu-options" role="group" aria-label="启用的平台"></div>
+              <button id="platform-manage" class="header-platform-manage" type="button" role="menuitem">搭建与管理平台 <span aria-hidden="true">↗</span></button>
+            </div>
+          </div>
+        </header>
+
+        <section id="community-panel" hidden aria-label="社区"><header><strong>社区</strong><button id="community-close" class="secondary-button" type="button">返回对话</button></header><div id="community-progress" role="progressbar" aria-label="正在载入社区" hidden></div><div id="community-frame"></div><section id="community-error" role="alert" hidden><h2>暂时无法打开社区</h2><p></p><button id="community-retry" class="primary-button" type="button">重试</button></section></section>
+        <div id="messages" class="messages" role="log" aria-live="polite" aria-relevant="additions text">
+          <div class="welcome">
+            <img class="welcome-mark" src="../assets/buildme-mark.png" alt="" aria-hidden="true" />
+            <h1>接下来做什么？</h1>
+          </div>
+        </div>
+
+        <footer class="composer-dock">
+          <div class="context-bar" aria-label="当前运行环境">
+            <button id="capability-chip" class="context-chip" type="button">你的 Agent</button>
+            <div id="edition-chip" class="edition-chip" hidden aria-live="polite"></div>
+            <button id="workspace-chip" class="context-chip" type="button" title="选择工作空间">
+              <span aria-hidden="true">▱</span><span id="workspace-label">选择工作空间</span>
+            </button>
+            <div class="menu-anchor">
+              <button id="permission-chip" class="context-chip" type="button" aria-haspopup="menu" aria-expanded="false" aria-controls="permission-menu">
+                <span aria-hidden="true">◇</span><span id="permission-label">每次询问</span><span class="chevron" aria-hidden="true">⌄</span>
+              </button>
+              <div id="permission-menu" class="floating-menu permission-menu" role="menu" aria-label="权限模式" hidden>
+                <button id="permission-ask" type="button" role="menuitemradio" data-permission="ask" aria-checked="true">
+                  <span><strong>每次询问</strong><small>只读自动，写入与命令需确认</small></span><i aria-hidden="true">✓</i>
+                </button>
+                <button id="permission-workspace" type="button" role="menuitemradio" data-permission="workspace-write" aria-checked="false">
+                  <span><strong>工作区内自动执行</strong><small>工作区文件自动，命令仍确认</small></span><i aria-hidden="true">✓</i>
+                </button>
+                <button id="permission-bypass" type="button" role="menuitemradio" data-permission="bypass" aria-checked="false">
+                  <span><strong>完全访问（不审批）</strong><small>不审批，也不限制路径边界</small></span><i aria-hidden="true">✓</i>
+                </button>
+              </div>
+            </div>
+            <button id="model-chip" class="context-chip model-chip" type="button" title="配置模型">
+              <span class="connection-dot" aria-hidden="true"></span><span id="model-label">选择模型</span><span class="chevron" aria-hidden="true">⌄</span>
+            </button>
+          </div>
+
+          <div id="platform-chat-context" class="platform-chat-context" role="status" hidden>
+            <span class="platform-chat-ready-dot" aria-hidden="true"></span>
+            <div><strong id="platform-chat-name"></strong><span id="platform-chat-modules"></span></div>
+            <small>直接发送任务即可使用</small>
+          </div>
+          <form id="composer" class="composer">
+            <div id="attachment-list" class="composer-attachments" aria-label="待发送的文件" hidden></div>
+            <div class="composer-input-row">
+            <button id="attach-files" class="attach-files-button" type="button" aria-label="添加文件给 AI" title="添加文件：图片、PDF、Word、Excel 和文本"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m21 11-8.5 8.5a6 6 0 0 1-8.5-8.5L13 2a4 4 0 0 1 5.7 5.7l-8.6 8.5a2 2 0 0 1-2.8-2.8L15 6"/></svg></button>
+            <label class="sr-only" for="prompt">描述任务或提出问题</label>
+            <textarea id="prompt" rows="1" maxlength="100000" placeholder="描述任务或提出问题" aria-describedby="composer-hint"></textarea>
+            <button id="send" class="send-button" type="submit" aria-label="发送消息" title="发送（Enter）">↑</button>
+            </div>
+          </form>
+          <p id="composer-hint" class="composer-hint">可添加文件 · Enter 发送 · Shift + Enter 换行</p>
+        </footer>
+
+        <dialog id="attachment-preview" class="attachment-preview" aria-labelledby="attachment-preview-title">
+          <header class="dialog-header"><div><h2 id="attachment-preview-title">文件预览</h2><p id="attachment-preview-note"></p></div><button id="attachment-preview-close" class="icon-button" type="button" aria-label="关闭文件预览">×</button></header>
+          <div id="attachment-preview-content" class="attachment-preview-content"></div>
+        </dialog>
+
+        <section id="compare-dialog" class="compare-workspace" aria-labelledby="compare-title" hidden>
+          <header class="compare-header">
+            <button id="compare-close" class="secondary-button" type="button">← 单路聊天</button>
+            <div class="compare-heading"><h2 id="compare-title">双路聊天</h2><span id="compare-subtitle">同一个问题，两个 Agent，各自继续对话</span></div>
+            <details class="compare-history-menu"><summary>历史会话</summary><nav id="compare-history" aria-label="双路会话历史"></nav></details>
+            <button id="compare-new" class="secondary-button" type="button">新会话</button>
+            <button id="compare-settings-toggle" class="secondary-button" type="button" aria-expanded="false" aria-controls="compare-settings-panel">设置</button>
+            <button id="compare-results-toggle" class="secondary-button" type="button" aria-expanded="false" aria-controls="compare-analysis">对比结果</button>
+          </header>
+          <section id="compare-settings-panel" class="compare-settings-panel" hidden>
+            <div id="compare-new-form">
+              <label>对比方式 <select id="compare-kind"><option value="harness">同模型 · Pi 与 DSH</option><option value="model">同 Pi 能力 · 两个模型</option><option value="reading">同模型 · 两种读取策略</option></select></label>
+              <label>模型连接 <select id="compare-left-connection"></select></label>
+              <label id="compare-right-choice" hidden>右侧模型连接 <select id="compare-right-connection"></select></label>
+              <label class="compare-all"><input id="compare-pi-all" type="checkbox" /> 本次开启 Pi 全部能力</label>
+              <button id="compare-create" class="secondary-button" type="button">创建空白会话</button>
+              <p class="compare-config-hint">默认使用当前连接。直接在下方发送即可开始；模型对比需明确选择两条连接。</p>
+            </div>
+            <p id="compare-fixed-settings" hidden>此会话沿用创建时的模型与能力配置。需要更换时，请新建双路会话。</p>
+            <div id="compare-reading-note" class="compare-reading-note" hidden></div>
+          </section>
+          <div class="compare-stage">
+            <div id="compare-content" class="compare-conversations" aria-label="两个 Agent 的对话"></div>
+            <aside id="compare-analysis" class="compare-analysis" aria-labelledby="compare-analysis-title" hidden>
+              <header><h3 id="compare-analysis-title">对比结果</h3><button id="compare-analysis-close" class="icon-button" type="button" aria-label="收起对比结果">×</button></header>
+              <p class="compare-analysis-note">同模型对比展示两种 harness 的表现；随机输出差异不能全部归因于 harness。</p>
+              <div id="compare-workspace-details"></div><div id="compare-statistics"></div>
+              <div id="compare-summary"></div><div id="compare-changes" hidden></div><div id="compare-timeline" hidden></div>
+              <footer><button id="compare-inspect" type="button" class="secondary-button" hidden>并列 X 光</button><button id="compare-delete" type="button" class="secondary-button" hidden>删除会话</button></footer>
+            </aside>
+          </div>
+          <footer class="compare-composer-dock composer-dock">
+            <div class="context-bar"><button id="compare-workspace-chip" class="context-chip" type="button">选择工作空间</button><span id="compare-status" role="status"></span></div>
+            <form id="compare-send-form" class="composer">
+              <label class="sr-only" for="compare-prompt">同时发给两个 Agent，或继续追问</label>
+              <textarea id="compare-prompt" rows="1" maxlength="100000" placeholder="同时问两个 Agent…"></textarea>
+              <button id="compare-stop" type="button" class="secondary-button" hidden>停止两侧</button>
+              <button id="compare-send" class="send-button" type="submit" title="同时发送（Enter）" aria-label="同时发送给两个 Agent">↑</button>
+            </form>
+            <p class="composer-hint">两侧分别保留上下文 · Enter 同时发送 · Shift + Enter 换行</p>
+          </footer>
+        </section>
+      </section>
+      <button id="xray-backdrop" class="xray-backdrop" type="button" tabindex="-1" aria-label="关闭 X 光" hidden></button>
+      <aside id="xray-panel" class="xray-panel" aria-labelledby="xray-title" hidden>
+        <div id="xray-resize" class="xray-resize" role="separator" tabindex="0" aria-label="调整 X 光宽度" aria-orientation="vertical" aria-valuemin="320" aria-valuemax="720" aria-valuenow="420"></div>
+        <header class="xray-header">
+          <div><span class="xray-eyebrow">BUILDME / INSPECT</span><h2 id="xray-title">X 光 <span>看见每一步</span></h2></div>
+          <button id="xray-close" class="icon-button" type="button" aria-label="关闭 X 光">×</button>
+        </header>
+        <div class="xray-controls">
+          <label class="sr-only" for="xray-turn">选择回合</label><select id="xray-turn"></select>
+          <button id="xray-follow" type="button" aria-pressed="true">跟随最新</button>
+          <div class="xray-mode" aria-label="阅读模式"><button id="xray-beginner" type="button" aria-pressed="true">新手</button><button id="xray-advanced" type="button" aria-pressed="false">进阶</button></div>
+        </div>
+        <div id="xray-overview" class="xray-overview"></div>
+        <div id="xray-tabs" class="xray-tabs" role="tablist" aria-label="X 光视图">
+          <button id="xray-tab-timeline" type="button" role="tab" aria-selected="true" aria-controls="xray-timeline" data-xray-tab="timeline">时间线</button>
+          <button id="xray-tab-prompt" type="button" role="tab" aria-selected="false" aria-controls="xray-prompt" data-xray-tab="prompt" tabindex="-1">提示词</button>
+          <button id="xray-tab-context" type="button" role="tab" aria-selected="false" aria-controls="xray-context" data-xray-tab="context" tabindex="-1">上下文</button>
+          <button id="xray-tab-ledger" type="button" role="tab" aria-selected="false" aria-controls="xray-ledger" data-xray-tab="ledger" tabindex="-1">Token 账单</button>
+          <button id="xray-tab-raw" type="button" role="tab" aria-selected="false" aria-controls="xray-raw" data-xray-tab="raw" tabindex="-1" hidden>原始请求</button>
+        </div>
+        <div class="xray-section-label"><strong id="xray-view-title">执行时间线</strong><span id="xray-event-count"></span></div>
+        <div id="xray-timeline" class="xray-timeline" tabindex="0" role="tabpanel" aria-labelledby="xray-tab-timeline"></div>
+        <div id="xray-prompt" class="xray-inspect" tabindex="0" role="tabpanel" aria-labelledby="xray-tab-prompt" hidden></div>
+        <div id="xray-context" class="xray-inspect" tabindex="0" role="tabpanel" aria-labelledby="xray-tab-context" hidden></div>
+        <div id="xray-ledger" class="xray-inspect" tabindex="0" role="tabpanel" aria-labelledby="xray-tab-ledger" hidden></div>
+        <div id="xray-raw" class="xray-inspect" tabindex="0" role="tabpanel" aria-labelledby="xray-tab-raw" hidden></div>
+        <footer class="xray-footer">本回合统计仅含当前 Agent，子任务单独统计。</footer>
+      </aside>
+    </main>
+    <div id="experience-transition" class="experience-transition" aria-hidden="true" hidden><div class="experience-transition-emblem"></div><small>BUILDME</small><strong></strong></div>
+    <div id="experience-toast" class="experience-toast" role="status" aria-live="polite" hidden></div>
+
+    <dialog id="settings-dialog" aria-labelledby="settings-title">
+      <form id="settings-form" class="settings-form">
+        <header class="dialog-header">
+          <div><h2 id="settings-title">模型与偏好</h2><p>连接官方服务、本地模型或任意兼容中转站。</p></div>
+          <button id="close-settings" class="icon-button" type="button" aria-label="关闭设置">×</button>
+        </header>
+
+        <section class="settings-section" aria-labelledby="connection-title">
+          <div class="settings-section-heading">
+            <h3 id="connection-title">模型连接</h3><span id="connection-state" class="connection-state">尚未连接</span>
+          </div>
+          <div class="saved-connection-row">
+            <label class="field grow"><span>已保存连接</span><select id="connection-profile" aria-label="已保存连接"></select></label>
+            <button id="new-connection" class="small-button" type="button">新增</button>
+            <button id="delete-connection" class="small-button danger-button" type="button">删除</button>
+          </div>
+          <div class="field-grid">
+            <label class="field"><span>连接名称</span><input id="connection-name" name="name" autocomplete="off" placeholder="例如：我的中转站" /></label>
+            <label class="field"><span>服务商</span>
+              <select id="provider" name="provider">
+                <option value="deepseek">DeepSeek</option><option value="openai">OpenAI</option><option value="anthropic">Anthropic</option>
+                <option value="google">Google Gemini</option><option value="openrouter">OpenRouter</option><option value="groq">Groq</option>
+                <option value="mistral">Mistral AI</option><option value="xai">xAI</option><option value="dashscope">通义千问 / DashScope</option>
+                <option value="ark">豆包 / 火山方舟</option><option value="moonshot">月之暗面 / Kimi</option><option value="zhipu">智谱 / GLM</option>
+                <option value="minimax">MiniMax</option><option value="siliconflow">硅基流动</option><option value="ollama">Ollama</option>
+                <option value="lmstudio">LM Studio</option><option value="openai-compatible">OpenAI 兼容 / 中转站</option>
+              </select>
+            </label>
+          </div>
+          <label class="field"><span>模型</span><input id="model" name="model" list="model-suggestions" autocomplete="off" placeholder="输入模型 ID" required /></label>
+          <datalist id="model-suggestions"><option value="deepseek-chat"></option><option value="deepseek-reasoner"></option><option value="gpt-5"></option><option value="claude-sonnet-4-5"></option><option value="gemini-2.5-pro"></option><option value="qwen3-coder-plus"></option></datalist>
+          <label class="field"><span>API 地址 <em>官方地址会自动填写，也可使用中转站</em></span><input id="base-url" name="baseUrl" type="url" spellcheck="false" placeholder="https://api.example.com/v1" /></label>
+          <label class="field"><span id="api-key-label">API Key <em>留空即保留当前密钥</em></span><span class="api-key-input"><input id="api-key" name="apiKey" type="password" autocomplete="new-password" spellcheck="false" placeholder="输入 API Key" /><button id="paste-api-key" type="button" title="从系统剪贴板粘贴 API Key">粘贴</button></span></label>
+          <p id="connection-auth-hint" class="privacy-note credential-note"><span aria-hidden="true">●</span><span id="connection-auth-copy">连接信息仅保存在这台设备上，密钥不会显示在界面中。</span></p>
+          <p class="privacy-note"><span aria-hidden="true">●</span>连接信息仅保存在这台设备上，密钥不会显示在界面中。</p>
+        </section>
+
+        <section class="settings-section" aria-labelledby="appearance-title">
+          <h3 id="appearance-title">外观</h3>
+          <div class="theme-picker" role="radiogroup" aria-label="主题">
+            <button id="theme-system" type="button" role="radio" data-theme-option="system" aria-checked="true">跟随系统</button>
+            <button id="theme-light" type="button" role="radio" data-theme-option="light" aria-checked="false">亮色</button>
+            <button id="theme-dark" type="button" role="radio" data-theme-option="dark" aria-checked="false">深色</button>
+          </div>
+        </section>
+
+        <section class="settings-section"><h3>社区</h3><label class="field"><span>社区网址</span><input id="community-url" type="url" placeholder="留空时即将开放"/></label><button id="community-save" class="secondary-button" type="button">保存社区网址</button><p id="community-config-status" role="status"></p></section>
+        <section class="settings-section" aria-labelledby="xray-settings-title">
+          <h3 id="xray-settings-title">X 光记录</h3>
+          <label class="trace-setting"><input id="record-raw-requests" type="checkbox" checked>记录发给模型的原始请求</label>
+          <p class="privacy-note">仅保存在本机，敏感信息会隐藏。切换立即保存，从下一回合生效；关闭后仍记录调用统计与不含正文的上下文占用。</p>
+          <label class="trace-setting"><input id="show-xray-moments" type="checkbox" checked>在回答下方显示“本轮值得看的一幕”</label>
+        </section>
+
+        <footer class="dialog-actions"><button id="cancel-settings" class="secondary-button" type="button">取消</button><button class="primary-button" type="submit">保存连接</button></footer>
+      </form>
+    </dialog>
+
+    <dialog id="plugin-market-dialog" class="plugin-market-dialog" aria-labelledby="plugin-market-title">
+      <section class="market-shell">
+        <header class="dialog-header">
+          <div><h2 id="plugin-market-title">插件市场</h2><p>浏览 Pi 社区作者发布、维护和讨论的第三方扩展。</p></div>
+          <button id="close-plugin-market" class="icon-button" type="button" aria-label="关闭插件市场">×</button>
+        </header>
+        <section class="market-section" aria-labelledby="pi-market-title">
+          <div class="market-heading"><span class="market-badge pi">Pi</span><div><h3 id="pi-market-title">Pi 社区热门插件</h3><p>内容来自社区第三方作者。可按 npm 月下载量、GitHub Star 和社区近期讨论热度浏览。</p></div></div>
+          <div class="market-actions"><button id="open-pi-community-popular" class="primary-button" type="button">热门插件榜</button><button id="open-pi-community-github" class="secondary-button" type="button">GitHub 热门</button><button id="open-pi-community-reddit" class="secondary-button" type="button">社区讨论</button></div>
+          <p class="market-note">支持的社区包来源：<code>npm:包名</code>、<code>git:github.com/作者/仓库</code> 或 HTTPS 仓库链接。</p>
+        </section>
+      </section>
+    </dialog>
+
+    <dialog id="approval-dialog" class="approval-dialog" aria-labelledby="approval-title">
+      <section class="approval-card">
+        <header><span class="approval-icon" aria-hidden="true">◇</span><div><h2 id="approval-title">Agent 请求执行工具</h2><p>检查本次操作后选择是否继续。</p></div></header>
+        <dl><div><dt>工具</dt><dd id="approval-tool">—</dd></div><div><dt>参数</dt><dd><pre id="approval-arguments">—</pre></dd></div></dl>
+        <footer><button id="deny-approval" class="secondary-button" type="button">拒绝</button><button id="allow-approval" class="primary-button" type="button">允许本次</button></footer>
+      </section>
+    </dialog>
+
+    <aside id="achievement-toast" class="achievement-toast" role="status" aria-live="polite" hidden></aside>
+    <dialog id="achievements-dialog" class="achievements-dialog" aria-labelledby="achievement-title">
+      <header><div><h2 id="achievement-title">你的探索足迹</h2><p id="achievement-count">已解锁 0 / 30</p></div><button id="achievement-close" class="icon-button" type="button" aria-label="关闭成就页">×</button></header>
+      <p id="achievement-status" role="status">学习记录只保存在本地。</p>
+      <div id="achievement-grid" class="achievement-grid"></div>
+      <footer><button id="achievement-export" class="secondary-button" type="button">导出学习记录</button><small>仅成就、能力状态和计数器；不含聊天与 Trace。</small></footer>
+    </dialog>
+    <dialog id="capabilities-dialog" class="capabilities-dialog" aria-labelledby="capability-title">
+      <header><div><h2 id="capability-title">我的 Agent</h2><p>一点点增加能力，在 X 光里看见变化。</p></div><button id="capability-close" class="icon-button" type="button" aria-label="关闭能力面板">×</button></header>
+      <section class="capability-progress"><strong id="capability-progress-label"></strong><progress id="capability-progress" max="9" value="0"></progress><p id="capability-remaining"></p></section>
+      <p id="capability-engine-note" hidden>这些开关用于 Build 模式。完全体使用 DSH 的原生能力。</p>
+      <p id="capability-status" role="status">切换从下一回合生效，当前回合的配置保持不变。</p>
+      <div id="capability-cards" class="capability-grid"></div>
+      <h3>完全体专属</h3><div id="capability-exclusive" class="capability-grid"></div>
+    </dialog>
+    <dialog id="capability-onboarding" class="capability-onboarding" aria-labelledby="capability-onboarding-title">
+      <h2 id="capability-onboarding-title">从什么样的 Agent 开始？</h2>
+      <p>每次打开一项能力，都可以在 X 光里看到工具和提示词的变化。</p>
+      <button id="capability-choose-minimal" class="capability-choice" type="button"><strong>从最小开始（推荐）</strong><span>只开基础能力，然后一个个打开，看着你的 Agent 长大。</span></button>
+      <button id="capability-choose-all" class="capability-choice" type="button"><strong>全部打开</strong><span>直接使用九项扩展能力，以后可以随时关掉。</span></button>
+      <p id="capability-onboarding-error" role="alert"></p>
+    </dialog>
+
+
+
+    <script src="../../node_modules/markdown-it/dist/browser/markdown-it.umd.min.js"></script>
+    <script src="./markdown.js"></script>
+    <script src="./streaming.js"></script>
+    <script src="./knowledge.cjs"></script>
+    <script src="./xray-help.js"></script>
+    <script src="./explanations.js"></script>
+    <script src="./xray-inspect.js"></script>
+    <script src="./xray-ledger.js"></script>
+    <script src="./xray.js"></script>
+    <script src="./capabilities.js"></script>
+    <script src="./achievements.js"></script>
+    <script src="./compare.js"></script>
+    <script src="./community.js"></script>
+    <script src="./experiences.js"></script>
+    <script src="./platform-guide.js"></script>
+    <script src="./platform-help.js"></script>
+    <script src="./platforms.js"></script>
+    <script src="./renderer.js"></script>
+  </body>
+</html>

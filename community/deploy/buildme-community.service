@@ -1,0 +1,25 @@
+[Unit]
+Description=BuildMe Community
+After=network.target
+
+[Service]
+Type=simple
+User=buildme-community
+Group=buildme-community
+WorkingDirectory=/opt/buildme-community/current
+Environment=NODE_ENV=production
+EnvironmentFile=/etc/buildme-community.env
+ExecStart=/usr/bin/node dist/src/server.js
+Restart=on-failure
+RestartSec=3
+UMask=0027
+NoNewPrivileges=true
+PrivateTmp=true
+ProtectSystem=strict
+ProtectHome=true
+ReadWritePaths=/var/lib/buildme-community /var/backups/buildme-community
+StandardOutput=journal
+StandardError=journal
+
+[Install]
+WantedBy=multi-user.target

@@ -1,0 +1,50 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1280" height="480" viewBox="0 0 1280 480" role="img" aria-labelledby="title description">
+  <title id="title">BuildMe</title>
+  <desc id="description">Build to understand. Understand to build. An open-source workspace for creating with agents, comparing two engines, and seeing how they work.</desc>
+  <defs>
+    <pattern id="grid" width="32" height="32" patternUnits="userSpaceOnUse"><path d="M32 0H0v32" fill="none" stroke="#41493e" stroke-width=".5"/></pattern>
+  </defs>
+  <rect width="1280" height="480" rx="20" fill="#f5f3ed"/>
+  <rect x="754" y="24" width="502" height="432" rx="15" fill="#20261f"/>
+  <rect x="754" y="24" width="502" height="432" rx="15" fill="url(#grid)" opacity=".48"/>
+  <g transform="translate(56 48)">
+    <path d="M18 0 34 9v19L18 38 2 29V10Z" fill="none" stroke="#242922" stroke-width="1.6"/>
+    <path d="m2 10 16 9 16-10M18 19v19M10 5l16 9v10l-8 4-8-5V5Z" fill="none" stroke="#242922" stroke-width="1.6"/>
+    <path d="m10 5 8-5 16 9-8 5Z" fill="#b8482c"/>
+    <text x="50" y="27" font-family="Arial,Helvetica,sans-serif" font-size="24" font-weight="700" letter-spacing="-.6" fill="#242922">BuildMe</text>
+  </g>
+  <text x="57" y="150" font-family="Arial,Helvetica,sans-serif" font-size="12" letter-spacing="2" font-weight="600" fill="#b8482c">MAKE THE CAPABILITY YOURS.</text>
+  <g font-family="Arial,Helvetica,sans-serif" font-weight="600" font-size="51" letter-spacing="-2">
+    <text x="54" y="222" fill="#242922">Build to understand.</text>
+    <text x="54" y="282" fill="#b8482c">Understand to build.</text>
+  </g>
+  <text x="57" y="335" font-family="Arial,Helvetica,sans-serif" font-size="17" fill="#666c63">An open-source workspace for creating with agents.</text>
+  <path d="M57 387h639" stroke="#d9ddd2"/>
+  <g font-family="Arial,Helvetica,sans-serif" font-size="11" letter-spacing="1.3" fill="#666c63">
+    <text x="57" y="420">DUAL CHAT</text><text x="199" y="420">X-RAY</text><text x="306" y="420">YOUR CAPABILITIES</text>
+  </g>
+  <circle cx="174" cy="416" r="2" fill="#b8482c"/><circle cx="281" cy="416" r="2" fill="#b8482c"/>
+  <text x="786" y="64" font-family="Arial,Helvetica,sans-serif" font-size="10" letter-spacing="1.8" fill="#acb6a2">ONE QUESTION. TWO APPROACHES.</text>
+  <rect x="927" y="92" width="156" height="37" rx="8" fill="#30382b" stroke="#637054"/>
+  <text x="1005" y="116" font-family="Arial,Helvetica,sans-serif" font-size="11" text-anchor="middle" fill="#d9dfd2">YOUR NEXT IDEA</text>
+  <path d="M1005 129v27m-116 34v-20q0-14 14-14h204q14 0 14 14v20" fill="none" stroke="#647259" stroke-width="1.2"/>
+  <g transform="translate(831 187)">
+    <path d="m58 0 58 32-58 33L0 33Z" fill="#cf7250" stroke="#e49a76" stroke-width="1.3"/>
+    <path d="m0 33 58 32v66L0 98Z" fill="#864d36" stroke="#d7835e" stroke-width="1.3"/>
+    <path d="m58 65 58-33v66l-58 33Z" fill="#a55d3d" stroke="#d7835e" stroke-width="1.3"/>
+    <path d="m29 16 58 33v66M29 49v66m29-84 58 34M0 65l58 33 58-33" fill="none" stroke="#e6a17f" stroke-width="1" opacity=".6"/>
+  </g>
+  <g transform="translate(1063 187)">
+    <path d="m58 0 58 32-58 33L0 33Z" fill="#809368" stroke="#adbb9d" stroke-width="1.3"/>
+    <path d="m0 33 58 32v66L0 98Z" fill="#4a593c" stroke="#97aa7d" stroke-width="1.3"/>
+    <path d="m58 65 58-33v66l-58 33Z" fill="#60744c" stroke="#97aa7d" stroke-width="1.3"/>
+    <path d="m29 16 58 33v66M29 49v66m29-84 58 34M0 65l58 33 58-33" fill="none" stroke="#c2d0b0" stroke-width="1" opacity=".6"/>
+  </g>
+  <g font-family="Arial,Helvetica,sans-serif" font-size="11" text-anchor="middle" letter-spacing="1">
+    <text x="889" y="349" fill="#e7b499">PI / YOUR AGENT</text>
+    <text x="1121" y="349" fill="#c0cbb4">DSH / FULL HARNESS</text>
+  </g>
+  <rect x="783" y="376" width="444" height="50" rx="9" fill="#263740" stroke="#496578"/>
+  <g fill="none" stroke="#95bedf" stroke-width="1.2"><circle cx="809" cy="401" r="9"/><circle cx="809" cy="401" r="4"/><path d="M809 388v6m0 14v6m-13-13h6m14 0h6"/></g>
+  <text x="832" y="405" font-family="Arial,Helvetica,sans-serif" font-size="11" letter-spacing=".8" fill="#bad4e6">X-RAY: SEE HOW THE WORK HAPPENS</text>
+</svg>

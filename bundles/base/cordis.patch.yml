@@ -1,0 +1,65 @@
+# Personal Agent base bundle. Like DSH's base bundle, this is one insert over
+# an empty profile root. Row order is for readers; Cordis service availability
+# controls activation.
+- insert:
+    - id: settings
+      name: cordis:piharness-settings
+      config:
+        name: BuildMe
+        home: .
+        agent:
+          provider: deepseek
+          model: deepseek-v4-flash
+          thinkingLevel: off
+          toolExecution: parallel
+          systemPrompt: '@buildme/agent'
+
+    - id: llm
+      name: cordis:piharness-llm
+
+    - id: session
+      name: cordis:piharness-session
+
+    - id: system-prompt
+      name: cordis:piharness-system-prompt
+
+    - id: tools
+      name: cordis:piharness-tools
+
+    - id: agent
+      name: cordis:piharness-agent
+
+    # One replaceable plugin exposes every provider/model bundled by Pi AI.
+    # Legacy profiles may still load cordis:piharness-llm-pi-ai-deepseek.
+    - id: llm-pi-ai-builtins
+      name: cordis:piharness-llm-pi-ai-builtins
+
+    - id: persona
+      name: cordis:piharness-persona
+
+    - id: workspace-info
+      name: cordis:piharness-workspace-info
+
+    # Pi Agent Core's own filesystem/shell tools are adapted behind the
+    # replaceable ctx.tools service and receive the selected run workspace.
+    - id: workspace-tools
+      name: cordis:piharness-workspace-tools-pi
+
+    # PDF (per page), Word .docx, HTML and plain-text document reading.
+    - id: document-tools
+      name: cordis:piharness-document-tools
+
+    # BuildMe's full edition adds DSH-style capability families while retaining
+    # the same BuildMe renderer and Pi Agent execution loop.
+    - id: full-edition-tools
+      name: cordis:piharness-full-edition-tools
+
+    # ask / workspace-write / bypass is request-scoped, so Desktop can switch
+    # modes without rebuilding the plugin tree.
+    - id: permission-mode
+      name: cordis:piharness-permission-mode
+
+    # This is the only product-specific replacement: the stable DSH-shaped
+    # AgentFactory seam is implemented with Pi Agent Core.
+    - id: agent-loop
+      name: cordis:piharness-agent-loop-pi

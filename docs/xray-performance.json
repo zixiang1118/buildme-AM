@@ -1,0 +1,136 @@
+{
+  "platform": "darwin",
+  "arch": "arm64",
+  "cpu": "Apple M1",
+  "node": "v25.8.1",
+  "pairs": 21,
+  "modelDelayMsPerCall": 100,
+  "modelCalls": 2,
+  "toolCalls": 66,
+  "events": 202,
+  "raw": true,
+  "includesTracePersistence": true,
+  "baseline": "Same Pi runtime; collector entry methods disabled by fixture only (no production flag)",
+  "medianBaselineMs": 1076.8907089999993,
+  "medianTracedMs": 1116.492750000005,
+  "medianPairedOverheadPercent": 2.8002804816219338,
+  "samples": [
+    {
+      "baseline": 1076.8907089999993,
+      "traced": 1157.7633329999999,
+      "percent": 7.509826514809367
+    },
+    {
+      "baseline": 992.0202079999999,
+      "traced": 1122.2150000000001,
+      "percent": 13.124207647189406
+    },
+    {
+      "baseline": 1072.3786249999994,
+      "traced": 1090.0903749999998,
+      "percent": 1.651632136923692
+    },
+    {
+      "baseline": 1022.2946670000001,
+      "traced": 997.9120839999996,
+      "percent": -2.3850836541633376
+    },
+    {
+      "baseline": 1092.4587919999994,
+      "traced": 1090.6598329999997,
+      "percent": -0.16467065057038247
+    },
+    {
+      "baseline": 991.8417079999999,
+      "traced": 1134.101333999999,
+      "percent": 14.342976792825002
+    },
+    {
+      "baseline": 1069.3632919999982,
+      "traced": 1114.0063340000015,
+      "percent": 4.174731107190784
+    },
+    {
+      "baseline": 1112.207707999998,
+      "traced": 1090.0795829999988,
+      "percent": -1.9895676716528663
+    },
+    {
+      "baseline": 1054.6550409999982,
+      "traced": 1104.9131659999985,
+      "percent": 4.765361473297161
+    },
+    {
+      "baseline": 1070.3319580000025,
+      "traced": 1156.1247079999994,
+      "percent": 8.015527272520876
+    },
+    {
+      "baseline": 1071.6351250000007,
+      "traced": 1169.0141669999975,
+      "percent": 9.08695877246435
+    },
+    {
+      "baseline": 1099.6936659999992,
+      "traced": 1091.6317080000008,
+      "percent": -0.7331094330408209
+    },
+    {
+      "baseline": 1104.4432500000003,
+      "traced": 1113.087875000001,
+      "percent": 0.7827133716468285
+    },
+    {
+      "baseline": 1106.127916999998,
+      "traced": 1116.492750000005,
+      "percent": 0.937037465623149
+    },
+    {
+      "baseline": 1093.175292,
+      "traced": 1104.120624999996,
+      "percent": 1.0012422600561326
+    },
+    {
+      "baseline": 1114.2005419999987,
+      "traced": 1199.0650830000013,
+      "percent": 7.6166307411473815
+    },
+    {
+      "baseline": 1109.698375,
+      "traced": 1140.7730420000007,
+      "percent": 2.8002804816219338
+    },
+    {
+      "baseline": 1072.5443749999977,
+      "traced": 1100.5895410000012,
+      "percent": 2.6148257035988447
+    },
+    {
+      "baseline": 1100.1092080000017,
+      "traced": 1140.1204169999983,
+      "percent": 3.6370215528635534
+    },
+    {
+      "baseline": 1073.6967080000031,
+      "traced": 1121.015250000004,
+      "percent": 4.407067810438025
+    },
+    {
+      "baseline": 1112.0914580000026,
+      "traced": 1131.9207500000048,
+      "percent": 1.7830630617074774
+    }
+  ],
+  "totalOverheadPercent": 3.8645135215577886,
+  "p95OverheadPercent": 13.124207647189406,
+  "maxOverheadPercent": 14.342976792825002,
+  "samplesOverFivePercent": 6,
+  "measuredAt": "2026-10-05",
+  "electron": {
+    "version": "43.4.0",
+    "events": 202,
+    "queryMs": 7.899999998509884,
+    "renderMs": 97.19999999925494,
+    "source": "scripts/verify-xray-electron.mjs"
+  }
+}

@@ -1,0 +1,22 @@
+import { test, expect } from '@playwright/test';
+import sharp from 'sharp';
+test('W-2 W-7 封面裁剪、作品草稿、发布与390px作品墙',async({page})=>{
+  const errors:string[]=[];page.on('pageerror',error=>errors.push(error.message));
+  await page.goto('/login');await page.getByLabel('用户名',{exact:true}).fill('作品同学');await page.getByLabel('密码',{exact:true}).fill('browser-test-password');await page.getByRole('button',{name:'登录',exact:true}).click();
+  await page.goto('/new?category=4');await expect(page.locator('[data-work-fields]')).toBeVisible();
+  await page.getByLabel('标题',{exact:true}).fill('课程表订阅小工具');await page.getByLabel('一句话介绍').fill('把课表转换为可订阅的日历');await page.getByRole('checkbox',{name:'BuildMe',exact:true}).check();
+  await page.getByLabel('正文 · Markdown',{exact:true}).fill('## 制作过程\n\n从一个具体的问题开始。');
+  await page.locator('[data-cover-input]').setInputFiles({name:'cover.png',mimeType:'image/png',buffer:await sharp({create:{width:1000,height:1800,channels:3,background:'#c4582f'}}).png().toBuffer()});
+  await expect(page.locator('input[name=coverId]')).not.toHaveValue('');
+  await expect(page.locator('[data-cover-preview]')).toBeVisible();
+  await page.getByLabel('封面缩放',{exact:true}).focus();await page.keyboard.press('ArrowRight');
+  await page.getByRole('button',{name:'保存草稿',exact:true}).click();await expect(page).toHaveURL(/\/drafts\/\d+$/);
+  await expect(page.getByLabel('一句话介绍')).toHaveValue('把课表转换为可订阅的日历');await expect(page.locator('[data-cover-preview]')).toBeVisible();
+  await page.getByRole('button',{name:'发布',exact:true}).click();await expect(page.locator('.work-detail-cover')).toBeVisible();
+  expect(await page.locator('.work-detail-cover').evaluate((image:HTMLImageElement)=>[image.naturalWidth,image.naturalHeight])).toEqual([1600,1000]);
+  await page.goto('/works');await expect(page.locator('.work-grid')).toContainText('课程表订阅小工具');
+  await page.setViewportSize({width:390,height:844});
+  expect(await page.evaluate(()=>document.documentElement.scrollWidth<=innerWidth)).toBe(true);
+  expect(await page.locator('.work-grid').evaluate(e=>getComputedStyle(e).gridTemplateColumns.split(' ').length)).toBe(1);
+  expect(errors).toEqual([]);
+});

@@ -1,0 +1,20 @@
+FROM ubuntu:24.04
+ENV DEBIAN_FRONTEND=noninteractive
+RUN apt-get update && apt-get install -y ca-certificates curl gnupg build-essential python3 sqlite3 rsync tar sudo openssl caddy \
+ && curl -fsSL https://deb.nodesource.com/setup_22.x -o /tmp/node22-setup.sh \
+ && bash /tmp/node22-setup.sh && apt-get install -y nodejs && npm install -g pnpm@10.32.1
+RUN useradd --system --create-home --home-dir /var/lib/buildme-community --shell /usr/sbin/nologin buildme-community \
+ && install -d -o buildme-community -g buildme-community /opt/buildme-community/releases/initial /var/lib/buildme-community/media /var/backups/buildme-community
+COPY . /tmp/community/
+RUN rsync -a --exclude node_modules --exclude .env --exclude data --exclude output /tmp/community/ /opt/buildme-community/releases/initial/ \
+ && chown -R buildme-community:buildme-community /opt/buildme-community \
+ && ln -sfn /opt/buildme-community/releases/initial /opt/buildme-community/current
+WORKDIR /opt/buildme-community/current
+RUN sudo -u buildme-community pnpm install --frozen-lockfile && sudo -u buildme-community pnpm build
+RUN umask 027; printf 'SESSION_SECRET=%s\nSITE_URL=http://localhost:3100\nPORT=3100\nDATA_DIR=/var/lib/buildme-community\nSTORAGE_DRIVER=local\nTRUST_PROXY=true\nBACKUP_DIR=/var/backups/buildme-community\nBACKUP_REMOTE=local\n' "$(openssl rand -hex 32)" > /etc/buildme-community.env \
+ && chown root:buildme-community /etc/buildme-community.env && chmod 640 /etc/buildme-community.env \
+ && sudo -u buildme-community node --env-file=/etc/buildme-community.env --import tsx scripts/migrate.ts
+RUN COMMUNITY_DOMAIN=localhost caddy adapt --config deploy/Caddyfile --adapter caddyfile >/dev/null
+USER buildme-community
+ENV NODE_ENV=production
+CMD ["node","--env-file=/etc/buildme-community.env","dist/src/server.js"]

@@ -1,0 +1,530 @@
+{
+  "sourceReview": {
+    "skills": 8,
+    "files": 83,
+    "sha256": {
+      "skills/buildme-medicinal-research/assets/evidence-ledger.json": "e4789de7bf4d0799f45cf1c261ee018dc81f0eeb30a0beb94f1cec6b1917b0b7",
+      "skills/buildme-medicinal-research/assets/experiment-plan.json": "d7d0bd01c5a0bee6c33cf07b8e3541dddf27cc911cafb8d4a771401ce64da456",
+      "skills/buildme-medicinal-research/assets/reaction-record.json": "a9283c298db499a6c82ee042e314c7a5a50f35e4f688d1f274aec72e61e6f05e",
+      "skills/buildme-medicinal-research/SKILL.md": "da71fbdd13a18c44a5431b8aacd1c9309b1d398e67d6168dabd1edb5bd1269e0",
+      "skills/hypothesis-generation/assets/evidence_ledger_template.csv": "1ec5cc4ada96e05041c67865bcdfd3bb0a4f7cc92f24ca1ce7a826028a41d3de",
+      "skills/hypothesis-generation/assets/falsification_controls_template.json": "beea4e2be3b5abdad1014934a7c2fe1f9f00f07b3270119cfeb8134a94603e26",
+      "skills/hypothesis-generation/assets/hypothesis_record_template.json": "73f080a6696c415f228b38100bb7b0f6bc89ad2c7997bf50d62b585b0bc8fe0c",
+      "skills/hypothesis-generation/assets/operationalization_template.json": "36ecdbd91c022554e60db646b548f5694d8409277a5b15fdf309d86f8c1e3070",
+      "skills/hypothesis-generation/assets/prediction_rival_matrix_template.csv": "ccf6cb53c048a9f4d60788a8ec73c5d683ec549dab7df95b30282f6c0963653a",
+      "skills/hypothesis-generation/assets/preregistration_scaffold_template.md": "fa577c7413435054ed927a9a925abc2f3a99373e55431eb6407425670276d87b",
+      "skills/hypothesis-generation/assets/search_boundary_template.json": "b885d4e252c0df7010d8fca3dab7e3fef49e9f386b7a1b15240531ce374bf6ec",
+      "skills/hypothesis-generation/assets/source_ledger.csv": "9543f313b9cffec9bd2cf39376edca86d39c10635b447fa7689147931d8c4813",
+      "skills/hypothesis-generation/references/causal_inference_and_claims.md": "0162cd131dd12c6235a3b78c033c685abd80e98d5f40f9fb297b4d8104f85122",
+      "skills/hypothesis-generation/references/concepts_and_workflow.md": "a86a8f464fb555212e79bf13e307f3c129e9c853069856eb3c93c3c8a60bb7fc",
+      "skills/hypothesis-generation/references/ethics_safety_and_ai.md": "81d5691cd46d646ead2db50635bdcc07755e5f738b040c2ad707ac3b0eda034d",
+      "skills/hypothesis-generation/references/experimental_design_patterns.md": "83c0c75c7b1edadc92e4ae23607624277c19955fc6a71ee0313b6efc51e4e939",
+      "skills/hypothesis-generation/references/hypothesis_quality_criteria.md": "12698b549f77a6ee64807b959093f39628fe3d47aa9a00a9b235681bf0b09269",
+      "skills/hypothesis-generation/references/literature_search_strategies.md": "2a34fa0645f854093aea2d867059bae563c795f1935ba4b9c6d494bdc389fdcb",
+      "skills/hypothesis-generation/references/preregistration_and_open_science.md": "33788e3cd4eeb62e80e9fb952e3bfb532320d373e7b00ed7c0a75b4200ccdbf4",
+      "skills/hypothesis-generation/references/security_validation.md": "71acbc8d040588f1ab879cafeb0e7d491cbed99359bde011c645d289446ba38a",
+      "skills/hypothesis-generation/references/source_ledger.md": "b0281b810134599210f905f967267f0b44638676f673fca7528275f8e5042e55",
+      "skills/hypothesis-generation/references/tool_reference.md": "db2c2f8fefc4093c0e235a309de3ee5767c672519d8c8b681e65f7ac6a9ff5d7",
+      "skills/hypothesis-generation/scripts/_common.py": "7a41a5f9b97092ee188d45959f38f92a4215d4f298dd04fd0f2817e9f607e74e",
+      "skills/hypothesis-generation/scripts/audit_evidence_ledger.py": "18fc0a947fec34ea573eb824f540ce6ccb351aed5e08fc80ae476c2150aef2bb",
+      "skills/hypothesis-generation/scripts/check_falsification_controls.py": "e56f67b92d15c93cbe9eb1b9fb89253239b6ac81328fb56fc96d9e2c3ec3ba32",
+      "skills/hypothesis-generation/scripts/check_operationalization.py": "efc093f4b58b23e095238e60badef04d34dfb012b7958e1326a1f7d58ed5edd6",
+      "skills/hypothesis-generation/scripts/generate_preregistration_scaffold.py": "12df2ad3bcd47ef172b3284e9c8c543ef01ba415d3ab21ffe3ead079cdc454da",
+      "skills/hypothesis-generation/scripts/lint_causal_claims.py": "561186e71f7c0b573f7ba45ef0009460c1398048929ed55fad53a65cda56dafe",
+      "skills/hypothesis-generation/scripts/validate_hypothesis_schema.py": "63bc1b7752d20042c2845ecb2457448ec8e2d9bc8fe1337003b222f8f4620608",
+      "skills/hypothesis-generation/scripts/validate_prediction_matrix.py": "3888802496f4e6ece5955b4fe28d6b2e6d810c5107ce6ca45ebbd70acceed317",
+      "skills/hypothesis-generation/SKILL.md": "5bccec0437d96d61821ec2095e7e32b61e8634cd8c02f11f42da953121e92719",
+      "skills/rdkit/references/api_reference.md": "160f14e37cfaff3a93e77d77c772b0a06b5dd413fbefddc9a6bc414f5dd63d70",
+      "skills/rdkit/references/core_capabilities.md": "6ec3d2334012a4b6bbd46a1a055fccad3aa01650c778e6d9c2793d06fa666306",
+      "skills/rdkit/references/descriptors_reference.md": "5213da1e42c99249490e5a619d213911cafc708056c2e3444f8514cd9e9ce4f9",
+      "skills/rdkit/references/review.md": "66c4364a9949942203c32aa40766291da75112833576834c272fa24e80817119",
+      "skills/rdkit/references/smarts_patterns.md": "3746ed0bf7d7ca99b945e5c4ac53077f539e7a20d9091ec59c8c3e0f2a37f190",
+      "skills/rdkit/references/workflows_and_best_practices.md": "13ac8e6ce522b5585a6c964b10b539d06e18e1c3d4c18880a9733b0be5e54a3f",
+      "skills/rdkit/scripts/_common.py": "b9de71f55294e9587b42173a49f688f03808678fdf085604fd0a3b3d1ec4fafc",
+      "skills/rdkit/scripts/molecular_properties.py": "93deadbda64b763d5ff07e88f48de57968e8f2cf1ed210898899bc73f173806a",
+      "skills/rdkit/scripts/similarity_search.py": "fa935d7cb14f9aa601c15ae2daec539513a397727946b2b62126b77dcf1b52a6",
+      "skills/rdkit/scripts/substructure_filter.py": "3a737d874bab1007409aea7398d001602142cf54f8fc64b080109da91ac6b513",
+      "skills/rdkit/SKILL.md": "9f32d5d229bc1a5bac3e57de5fb87895cdb85dcc99132c57373905db0e1a941e",
+      "skills/medchem/references/api_guide.md": "acba89f01dfba48e3ef18edba2ee25859f8f98cc488d7c39eca9f71d32c23bd2",
+      "skills/medchem/references/rules_catalog.md": "0a429dfe34cf877f9a581ffac6c584d2334038a8303c5d85f6be293ca709e9aa",
+      "skills/medchem/scripts/filter_molecules.py": "bed43299e25f3f12acb8e30f506e2de57a71a24852b6b19f7c3560b8fe455d67",
+      "skills/medchem/SKILL.md": "07e44d0dc965278ab8e4fe9a325e89198bccd7e3ee26c1c454e788e1f4df9c2f",
+      "skills/retrosynthesis/references/aizynthfinder-setup.md": "5c41beb33b911b7540a701aea565ee8fb63f840d92a44877c3ebc52f08f6dc21",
+      "skills/retrosynthesis/references/route-quality.md": "934f6385280be9e37d1a9d462ff2f74fe248b21db58953f62aee7d2ff4696ccc",
+      "skills/retrosynthesis/references/synthesizability-scores.md": "fbdee78ed6ba1833c8dd836d5d27921dbcf6d46fefa2ba35fdc01654c43bcf2d",
+      "skills/retrosynthesis/scripts/aizynth_config.py": "44a5123d44534d2a17234cfc134140eb68efb373e322edefeac3664736159338",
+      "skills/retrosynthesis/scripts/route_report.py": "1009e1895cc3f79658386bf321b80a9b8d69d8382f0229d092cf1118d54651f4",
+      "skills/retrosynthesis/SKILL.md": "cca58d59c1fe87b102ad41b609aabfe2b78ea01a139e7e322ff94a71dd37d95e",
+      "skills/experimental-design/references/design_types.md": "1f36f14160bc9895773a2922402869202866410c9130f2b32c5a54e5f5a6e71b",
+      "skills/experimental-design/references/factorial_and_doe.md": "a59fa2279c439c096a66955b4923ad68c00d6046570665e6f6d36e807fa1de63",
+      "skills/experimental-design/references/randomization_and_blocking.md": "fabcfae913397fb8c3018b959b67ddf8fe47322b40cbf4155d898fa11738e9ae",
+      "skills/experimental-design/references/sequential_and_adaptive.md": "83085e2cde0942de23670d3aabb30768fb576a6aa99c2e4ac6f7790b00977051",
+      "skills/experimental-design/scripts/doe_designs.py": "916996b5e6a5dbb9a408aa1e755a95800af70231e46d12c8c5efddb9e3e30683",
+      "skills/experimental-design/scripts/randomization.py": "c7c2eab469618a4b27548058b924ec3f4aafaf635d3797af920b9058e700bce4",
+      "skills/experimental-design/SKILL.md": "db2de0f3d29b7729776a91e923c9c83801298f5ad8e88fe44570045fbefcc248",
+      "skills/analytical-method-validation/assets/validation-protocol-template.md": "c157c47eb77e136b40904f6323988ccf662dad6b60811d330323b189c232fc5f",
+      "skills/analytical-method-validation/assets/validation-report-template.md": "f0519fb2abd9d0315f0b6cba76527659ab500f9a311f268d66452f7798e574e0",
+      "skills/analytical-method-validation/references/compendial-and-clsi.md": "f3bfe0e15892966b3c4db43c542b32af89455f755529f1f13a04c15421013230",
+      "skills/analytical-method-validation/references/framework-selection.md": "ad7a9d07c6c66d68464ed759bd9a646df8db06fca2897478825e0de12d341945",
+      "skills/analytical-method-validation/references/ich-m10-bioanalytical.md": "695367208b8b4883879b364f57df9bc73f17cb98181a093d43880c0453764c4a",
+      "skills/analytical-method-validation/references/ich-q2r2.md": "9871db11c76e1c74e191f28a44e3047a67663d487384188b4f0b228f886ad34b",
+      "skills/analytical-method-validation/references/source-ledger.md": "fd5605e03d4203df8caffa7ba3464147a65c3ee5f8a7056bdcc8a2d2beb2fca6",
+      "skills/analytical-method-validation/references/statistics.md": "0f8f33bc0c363e0fe7088ea718fe8928bd1bdd4afef1646f927cca317915d453",
+      "skills/analytical-method-validation/scripts/_catalog.py": "c597f14d44eceb997b7f12a5035e81669c3ad3ded1e487796f58d4392efef8ed",
+      "skills/analytical-method-validation/scripts/_common.py": "c801e568b409acf7a510069b3697e6a74bf372adcfa7dcfb27b442a670580b26",
+      "skills/analytical-method-validation/scripts/check_accuracy_precision.py": "1d24ee3f5a81d0bc40d30009f6ea7dab7422455eaf9adef6e4d0f5a1f5cd88a7",
+      "skills/analytical-method-validation/scripts/check_bioanalytical_run.py": "e754fc8407e5e6b003c96e25db577a1e88b6dcebc0c47f188e299cc13dfbc18c",
+      "skills/analytical-method-validation/scripts/check_detection_limits.py": "78178d76499005497f7b05a2a8ca6b948c151860ad34195e0f3701f0b2f4d402",
+      "skills/analytical-method-validation/scripts/check_response.py": "fa732cb35a6652a5ffa08208271180d51160f73e89307883251da670f9aaac1d",
+      "skills/analytical-method-validation/scripts/compare_methods.py": "d3f51cd0a31fbcc9e4259f791e1a9c515ba42f0d4090348962387cdf91f0fead",
+      "skills/analytical-method-validation/scripts/plan_validation.py": "e2d95299d6a4e1eaf57de9e96dfd5dae82596e5f239b14b19e0e35cc0dcf01b3",
+      "skills/analytical-method-validation/SKILL.md": "7c2cd278bd397f0f85f4fc790b236a61190cff8799c8ece8da923342f4dc0032",
+      "skills/statistical-analysis/references/assumptions_and_diagnostics.md": "6e1ebc110c092845b93e5c6d28f38c8a990780105ba1865f0bd47c007620b073",
+      "skills/statistical-analysis/references/bayesian_statistics.md": "34d62e1b20dd82a11497be40e07c93e4fdb555d56e4944e200f881c1b7629cbf",
+      "skills/statistical-analysis/references/effect_sizes_and_power.md": "5e1321c9058b2931a1bd2a753c7a8f4295f58274412d62e99a34eabd478e42b2",
+      "skills/statistical-analysis/references/reporting_standards.md": "0a30a1bec63231c94c9c285977acaa4218c50a34c8385857d18f62c61ac817b7",
+      "skills/statistical-analysis/references/test_selection_guide.md": "e72e00b6ebe9450e5e84849503db223c4908a8d9a68c3b87cf0ab8ec3254fe83",
+      "skills/statistical-analysis/scripts/assumption_checks.py": "3e37a4e04407b5f040f103962ed0e73935d114d3892ee45b5a06a1da42c10341",
+      "skills/statistical-analysis/SKILL.md": "e112848726b3713267cac65e4e2c15491a0a26ee1ed628db01195f7e43f97997"
+    },
+    "scriptReviews": [
+      {
+        "path": "skills/hypothesis-generation/scripts/_common.py",
+        "imports": [
+          "__future__",
+          "csv",
+          "datetime",
+          "json",
+          "os",
+          "pathlib",
+          "re",
+          "sys",
+          "tempfile",
+          "typing"
+        ],
+        "executionOrNetworkCallsDetected": [],
+        "reviewedConstantImports": []
+      },
+      {
+        "path": "skills/hypothesis-generation/scripts/audit_evidence_ledger.py",
+        "imports": [
+          "__future__",
+          "_common",
+          "argparse",
+          "collections",
+          "datetime",
+          "typing",
+          "validate_hypothesis_schema"
+        ],
+        "executionOrNetworkCallsDetected": [],
+        "reviewedConstantImports": []
+      },
+      {
+        "path": "skills/hypothesis-generation/scripts/check_falsification_controls.py",
+        "imports": [
+          "__future__",
+          "_common",
+          "argparse",
+          "collections",
+          "re",
+          "typing",
+          "validate_hypothesis_schema"
+        ],
+        "executionOrNetworkCallsDetected": [],
+        "reviewedConstantImports": []
+      },
+      {
+        "path": "skills/hypothesis-generation/scripts/check_operationalization.py",
+        "imports": [
+          "__future__",
+          "_common",
+          "argparse",
+          "collections",
+          "typing"
+        ],
+        "executionOrNetworkCallsDetected": [],
+        "reviewedConstantImports": []
+      },
+      {
+        "path": "skills/hypothesis-generation/scripts/generate_preregistration_scaffold.py",
+        "imports": [
+          "__future__",
+          "_common",
+          "argparse",
+          "html",
+          "pathlib",
+          "re",
+          "typing",
+          "validate_hypothesis_schema"
+        ],
+        "executionOrNetworkCallsDetected": [],
+        "reviewedConstantImports": []
+      },
+      {
+        "path": "skills/hypothesis-generation/scripts/lint_causal_claims.py",
+        "imports": [
+          "__future__",
+          "_common",
+          "argparse",
+          "collections",
+          "re",
+          "typing"
+        ],
+        "executionOrNetworkCallsDetected": [],
+        "reviewedConstantImports": []
+      },
+      {
+        "path": "skills/hypothesis-generation/scripts/validate_hypothesis_schema.py",
+        "imports": [
+          "__future__",
+          "_common",
+          "argparse",
+          "collections",
+          "pathlib",
+          "typing"
+        ],
+        "executionOrNetworkCallsDetected": [],
+        "reviewedConstantImports": []
+      },
+      {
+        "path": "skills/hypothesis-generation/scripts/validate_prediction_matrix.py",
+        "imports": [
+          "__future__",
+          "_common",
+          "argparse",
+          "collections",
+          "re",
+          "typing",
+          "validate_hypothesis_schema"
+        ],
+        "executionOrNetworkCallsDetected": [],
+        "reviewedConstantImports": []
+      },
+      {
+        "path": "skills/rdkit/scripts/_common.py",
+        "imports": [
+          "pathlib",
+          "rdkit",
+          "sys"
+        ],
+        "executionOrNetworkCallsDetected": [],
+        "reviewedConstantImports": []
+      },
+      {
+        "path": "skills/rdkit/scripts/molecular_properties.py",
+        "imports": [
+          "_common",
+          "argparse",
+          "csv",
+          "rdkit",
+          "rdkit.Chem",
+          "sys"
+        ],
+        "executionOrNetworkCallsDetected": [],
+        "reviewedConstantImports": []
+      },
+      {
+        "path": "skills/rdkit/scripts/similarity_search.py",
+        "imports": [
+          "_common",
+          "argparse",
+          "csv",
+          "math",
+          "pathlib",
+          "rdkit",
+          "rdkit.Chem",
+          "sys"
+        ],
+        "executionOrNetworkCallsDetected": [],
+        "reviewedConstantImports": []
+      },
+      {
+        "path": "skills/rdkit/scripts/substructure_filter.py",
+        "imports": [
+          "_common",
+          "argparse",
+          "csv",
+          "pathlib",
+          "rdkit",
+          "sys"
+        ],
+        "executionOrNetworkCallsDetected": [],
+        "reviewedConstantImports": []
+      },
+      {
+        "path": "skills/medchem/scripts/filter_molecules.py",
+        "imports": [
+          "argparse",
+          "datamol",
+          "medchem",
+          "pandas",
+          "pathlib",
+          "rdkit",
+          "sys",
+          "tqdm",
+          "typing"
+        ],
+        "executionOrNetworkCallsDetected": [],
+        "reviewedConstantImports": []
+      },
+      {
+        "path": "skills/retrosynthesis/scripts/aizynth_config.py",
+        "imports": [
+          "__future__",
+          "argparse",
+          "pathlib",
+          "re",
+          "sys"
+        ],
+        "executionOrNetworkCallsDetected": [],
+        "reviewedConstantImports": []
+      },
+      {
+        "path": "skills/retrosynthesis/scripts/route_report.py",
+        "imports": [
+          "__future__",
+          "argparse",
+          "collections",
+          "csv",
+          "gzip",
+          "json",
+          "sys"
+        ],
+        "executionOrNetworkCallsDetected": [],
+        "reviewedConstantImports": []
+      },
+      {
+        "path": "skills/experimental-design/scripts/doe_designs.py",
+        "imports": [
+          "__future__",
+          "numpy",
+          "operator",
+          "pandas",
+          "pydoe"
+        ],
+        "executionOrNetworkCallsDetected": [],
+        "reviewedConstantImports": []
+      },
+      {
+        "path": "skills/experimental-design/scripts/randomization.py",
+        "imports": [
+          "__future__",
+          "numpy",
+          "operator",
+          "pandas"
+        ],
+        "executionOrNetworkCallsDetected": [],
+        "reviewedConstantImports": []
+      },
+      {
+        "path": "skills/analytical-method-validation/scripts/_catalog.py",
+        "imports": [
+          "__future__",
+          "typing"
+        ],
+        "executionOrNetworkCallsDetected": [],
+        "reviewedConstantImports": []
+      },
+      {
+        "path": "skills/analytical-method-validation/scripts/_common.py",
+        "imports": [
+          "__future__",
+          "argparse",
+          "csv",
+          "dataclasses",
+          "io",
+          "json",
+          "math",
+          "pathlib",
+          "statistics",
+          "sys",
+          "typing"
+        ],
+        "executionOrNetworkCallsDetected": [],
+        "reviewedConstantImports": []
+      },
+      {
+        "path": "skills/analytical-method-validation/scripts/check_accuracy_precision.py",
+        "imports": [
+          "__future__",
+          "_common",
+          "argparse",
+          "math",
+          "sys"
+        ],
+        "executionOrNetworkCallsDetected": [],
+        "reviewedConstantImports": [
+          {
+            "line": 30,
+            "module": "pathlib",
+            "purpose": "Resolve the current script directory for local shared modules"
+          }
+        ]
+      },
+      {
+        "path": "skills/analytical-method-validation/scripts/check_bioanalytical_run.py",
+        "imports": [
+          "__future__",
+          "_catalog",
+          "_common",
+          "argparse",
+          "math",
+          "sys"
+        ],
+        "executionOrNetworkCallsDetected": [],
+        "reviewedConstantImports": [
+          {
+            "line": 35,
+            "module": "pathlib",
+            "purpose": "Resolve the current script directory for local shared modules"
+          }
+        ]
+      },
+      {
+        "path": "skills/analytical-method-validation/scripts/check_detection_limits.py",
+        "imports": [
+          "__future__",
+          "_catalog",
+          "_common",
+          "argparse",
+          "math",
+          "sys"
+        ],
+        "executionOrNetworkCallsDetected": [],
+        "reviewedConstantImports": [
+          {
+            "line": 35,
+            "module": "pathlib",
+            "purpose": "Resolve the current script directory for local shared modules"
+          }
+        ]
+      },
+      {
+        "path": "skills/analytical-method-validation/scripts/check_response.py",
+        "imports": [
+          "__future__",
+          "_common",
+          "argparse",
+          "math",
+          "sys"
+        ],
+        "executionOrNetworkCallsDetected": [],
+        "reviewedConstantImports": [
+          {
+            "line": 28,
+            "module": "pathlib",
+            "purpose": "Resolve the current script directory for local shared modules"
+          }
+        ]
+      },
+      {
+        "path": "skills/analytical-method-validation/scripts/compare_methods.py",
+        "imports": [
+          "__future__",
+          "_common",
+          "argparse",
+          "math",
+          "sys"
+        ],
+        "executionOrNetworkCallsDetected": [],
+        "reviewedConstantImports": [
+          {
+            "line": 33,
+            "module": "pathlib",
+            "purpose": "Resolve the current script directory for local shared modules"
+          }
+        ]
+      },
+      {
+        "path": "skills/analytical-method-validation/scripts/plan_validation.py",
+        "imports": [
+          "__future__",
+          "_catalog",
+          "_common",
+          "argparse",
+          "sys"
+        ],
+        "executionOrNetworkCallsDetected": [],
+        "reviewedConstantImports": [
+          {
+            "line": 20,
+            "module": "pathlib",
+            "purpose": "Resolve the current script directory for local shared modules"
+          }
+        ]
+      },
+      {
+        "path": "skills/statistical-analysis/scripts/assumption_checks.py",
+        "imports": [
+          "matplotlib.pyplot",
+          "numpy",
+          "pandas",
+          "scipy",
+          "statsmodels.regression.linear_model",
+          "statsmodels.stats.diagnostic",
+          "statsmodels.stats.outliers_influence",
+          "statsmodels.stats.stattools",
+          "typing"
+        ],
+        "executionOrNetworkCallsDetected": [],
+        "reviewedConstantImports": []
+      }
+    ],
+    "scope": "AST parses every bundled script and screens direct network/dynamic execution calls; this is not validation of scientific accuracy or third-party package internals."
+  },
+  "chemistryVerification": {
+    "cases": [
+      "runtime status",
+      "aspirin formula/mass and SVG",
+      "invalid input without command execution",
+      "opposite stereoisomers remain distinct",
+      "unspecified stereo preserved",
+      "salt fragments preserved",
+      "unconfigured retrosynthesis returns no route"
+    ],
+    "status": {
+      "ok": true,
+      "action": "status",
+      "python": "<LOCAL_APP_DATA>/BuildMe/research-runtime/chemistry-env/Scripts/python.exe",
+      "ready": true,
+      "configured": true,
+      "code": null,
+      "message": null,
+      "pythonVersion": "3.12.13",
+      "rdkit": {
+        "ready": true,
+        "version": "2026.3.6"
+      },
+      "medchem": {
+        "ready": true,
+        "version": "2.1.1"
+      },
+      "retrosynthesis": {
+        "ready": true,
+        "missing": [],
+        "version": "4.4.1",
+        "files": [
+          {
+            "kind": "expansion.model",
+            "path": "D:\\BuildMeResearchRuntime\\models\\uspto_model.onnx"
+          },
+          {
+            "kind": "expansion.template",
+            "path": "D:\\BuildMeResearchRuntime\\models\\uspto_templates.csv.gz"
+          },
+          {
+            "kind": "filter.model",
+            "path": "D:\\BuildMeResearchRuntime\\models\\uspto_filter_model.onnx"
+          },
+          {
+            "kind": "stock.path",
+            "path": "D:\\BuildMeResearchRuntime\\models\\zinc_stock.hdf5"
+          }
+        ]
+      },
+      "configPath": "<LOCAL_APP_DATA>/BuildMe/research-runtime/config.json",
+      "publicationNote": "User-specific paths were redacted for source publication."
+    },
+    "retrosynthesisExecutionVerified": false
+  }
+}

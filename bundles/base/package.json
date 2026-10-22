@@ -1,0 +1,11 @@
+{
+  "name": "@my-agent/base",
+  "version": "0.3.5",
+  "private": true,
+  "license": "MIT",
+  "dsh": {
+    "bundle": {
+      "patch": "./cordis.patch.yml"
+    }
+  }
+}

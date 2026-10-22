@@ -1,0 +1,32 @@
+node_modules/
+dist/
+.piharness/
+.buildme/
+.env
+.env.*
+!.env.example
+coverage/
+release/
+artifacts/buildme-learning/
+.DS_Store
+Thumbs.db
+
+# Python environments and generated caches
+__pycache__/
+*.py[cod]
+.venv/
+venv/
+
+# Local runtime logs
+*.log
+
+# Local credentials and exported private key material
+desktop-settings.json
+.secrets/
+*.key
+*.p12
+*.pfx
+
+# Private deployment notes and local verification output
+/docs/buildtostudy-deployment.md
+/artifacts/

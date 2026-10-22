@@ -1,0 +1,37 @@
+.platform-guide { --guide-accent: #83b6a2; --guide-soft: color-mix(in srgb, var(--guide-accent), transparent 90%); width: min(980px, calc(100vw - 64px)); height: min(720px, calc(100dvh - 72px)); max-height: calc(100dvh - 32px); padding: 0; overflow: hidden; border: 1px solid var(--border); border-radius: 18px; background: var(--bg); color: var(--text); box-shadow: var(--shadow); }
+:root[data-theme="light"] .platform-guide { --guide-accent: #327b61; }
+.platform-guide::backdrop { background: rgb(0 0 0 / 50%); backdrop-filter: blur(5px); }
+.platform-guide-shell { height: 100%; display: grid; grid-template-rows: auto minmax(0, 1fr) auto; }
+.platform-guide-header { display: flex; justify-content: space-between; align-items: flex-start; gap: 24px; padding: 28px 30px 24px; border-bottom: 1px solid var(--border-soft); }
+.platform-guide-eyebrow { display: block; color: var(--guide-accent); font-size: 9px; font-weight: 600; line-height: 1.6; letter-spacing: .12em; }
+.platform-guide-header h2 { margin: 9px 0 8px; font-size: 23px; font-weight: 550; line-height: 1.4; letter-spacing: -.025em; }
+.platform-guide-header p { margin: 0; color: var(--text-muted); font-size: 12px; line-height: 1.8; }
+.platform-guide-dismiss { flex: 0 0 auto; width: 32px; height: 32px; display: grid; place-items: center; padding: 0; border: 1px solid var(--border-soft); border-radius: 8px; background: var(--surface); color: var(--text-muted); font-size: 22px; }
+.platform-guide-dismiss:hover { background: var(--surface-hover); color: var(--text); }
+.platform-guide-body { display: grid; grid-template-columns: 205px minmax(0, 1fr); min-height: 0; }
+.platform-guide-nav { display: flex; flex-direction: column; gap: 5px; min-height: 0; overflow: auto; padding: 22px 12px; border-right: 1px solid var(--border-soft); background: var(--sidebar); }
+.platform-guide-nav-item { display: flex; align-items: center; gap: 11px; width: 100%; padding: 12px; border: 1px solid transparent; border-radius: 8px; background: transparent; color: var(--text-muted); text-align: left; }
+.platform-guide-nav-item > span { width: 16px; flex: 0 0 auto; color: inherit; font: 10px ui-monospace, monospace; }
+.platform-guide-nav-item strong { font-size: 12px; font-weight: 500; line-height: 1.6; }
+.platform-guide-nav-item:hover { background: var(--surface); color: var(--text); }
+.platform-guide-nav-item[aria-current="page"] { background: var(--guide-soft); border-color: color-mix(in srgb, var(--guide-accent), transparent 75%); color: var(--guide-accent); }
+.platform-guide-page { min-width: 0; min-height: 0; overflow: auto; padding: 28px 32px 34px; overscroll-behavior: contain; }
+.platform-guide-page h3 { margin: 9px 0 24px; font-size: 21px; font-weight: 550; line-height: 1.45; letter-spacing: -.025em; }
+.platform-guide-page p, .platform-guide-page li { color: var(--text-subtle); font-size: 12px; line-height: 1.95; overflow-wrap: anywhere; }
+.platform-guide-quickstart { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 14px; margin: 0; padding: 0; list-style: none; }
+.platform-guide-step { padding: 18px; border: 1px solid var(--border); border-radius: 11px; background: var(--surface); }
+.platform-guide-number { color: var(--guide-accent); font: 11px ui-monospace, monospace; }
+.platform-guide-step h4 { margin: 13px 0 8px; color: var(--text); font-size: 13px; font-weight: 550; }
+.platform-guide-step p { margin: 0; font-size: 11px; }
+.platform-guide-note { margin-top: 20px; padding: 16px 18px; border: 1px solid color-mix(in srgb, var(--guide-accent), transparent 65%); border-radius: 9px; background: var(--guide-soft); }
+.platform-guide-note strong { color: var(--guide-accent); font-size: 12px; font-weight: 550; }.platform-guide-note p { margin: 7px 0 0; font-size: 11px; }
+.platform-guide-intro { margin: 0 0 20px; }.platform-guide-instructions { display: grid; gap: 20px; padding-left: 22px; margin: 0; }.platform-guide-instructions li { padding-left: 6px; }.platform-guide-instructions li::marker { color: var(--guide-accent); }.platform-guide-instructions h4 { margin: 0 0 5px; color: var(--text); font-size: 13px; font-weight: 550; }.platform-guide-instructions p { margin: 0; }
+.platform-guide-bullets { margin: 20px 0 0; padding-left: 18px; }.platform-guide-bullets li { padding-left: 5px; margin-bottom: 12px; }.platform-guide-bullets li::marker { color: var(--guide-accent); }
+.platform-guide-example { margin-top: 24px; padding: 18px; border: 1px solid var(--border); border-radius: 9px; background: var(--surface); }.platform-guide-example > span { color: var(--guide-accent); font-size: 10px; }.platform-guide-example p { margin: 9px 0 0; white-space: pre-wrap; }
+.platform-guide-faq { display: grid; gap: 12px; }.platform-guide-faq details { padding: 16px 18px; border: 1px solid var(--border); border-radius: 9px; background: var(--surface); }.platform-guide-faq summary { cursor: pointer; color: var(--text); font-size: 12px; line-height: 1.8; }.platform-guide-faq p { margin: 12px 0 0; }
+.platform-guide-footer { display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 12px; padding: 15px 24px; border-top: 1px solid var(--border-soft); }.platform-guide-footer > span { color: var(--text-muted); font-size: 10px; }.platform-guide-done { min-height: 34px; padding: 8px 13px; border: 1px solid color-mix(in srgb, var(--guide-accent), transparent 60%); border-radius: 8px; background: var(--guide-soft); color: var(--guide-accent); font-size: 11px; }.platform-guide-done:hover { border-color: var(--guide-accent); }.platform-guide :focus-visible { outline: 2px solid var(--guide-accent); outline-offset: 3px; }
+.platform-guide-entry { border-color: color-mix(in srgb, var(--platform-accent), transparent 70%); color: var(--platform-accent); background: var(--platform-soft); }
+.platform-top > .platform-actions { flex: 0 0 auto; flex-wrap: nowrap; }.platform-brand { min-width: 0; }.platform-top .platform-button { white-space: nowrap; }
+@media (max-width: 1050px) { .platform-top .platform-saving { display: none; } }
+@media (max-width: 720px) { .platform-guide { width: calc(100vw - 24px); height: calc(100dvh - 32px); border-radius: 13px; }.platform-guide-header { padding: 20px; gap: 12px; }.platform-guide-header h2 { font-size: 20px; }.platform-guide-body { grid-template-columns: minmax(0, 1fr); grid-template-rows: auto minmax(0, 1fr); }.platform-guide-nav { flex-direction: row; overflow-x: auto; padding: 10px; border-right: 0; border-bottom: 1px solid var(--border-soft); }.platform-guide-nav-item { width: auto; flex: 0 0 auto; padding: 9px; }.platform-guide-nav-item > span { display: none; }.platform-guide-page { padding: 23px 20px; }.platform-guide-page h3 { font-size: 19px; }.platform-guide-footer { padding: 13px 18px; }.platform-top { gap: 10px; }.platform-top .platform-actions { gap: 5px; }.platform-top .platform-button { padding: 7px 9px; } }
+@media (max-width: 520px) { .platform-guide-quickstart { grid-template-columns: minmax(0, 1fr); }.platform-guide-header p { font-size: 11px; }.platform-guide-footer > span { display: none; }.platform-guide-footer { justify-content: flex-end; }.platform-top { padding: 10px; }.platform-top .platform-brand > strong { display: none; }.platform-top .platform-mode-host { margin-left: 0; }.platform-top .platform-actions { gap: 4px; }.platform-top .platform-button { padding: 7px 6px; font-size: 10px; } }
